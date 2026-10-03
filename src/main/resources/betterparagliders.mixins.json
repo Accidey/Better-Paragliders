@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "com.xulai.betterparagliders.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "accessor.LivingEntityJumpAccessor",
+    "paragliders.stamina.BotWStaminaMixin",
+    "paragliders.movement.PlayerMovementMixin",
+    "paragliders.movement.ServerPlayerMovementMixin"
+  ],
+  "client": [
+    "paragliders.client.ClientPlayerMovementMixin",
+    "paragliders.client.InGameStaminaWheelRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
