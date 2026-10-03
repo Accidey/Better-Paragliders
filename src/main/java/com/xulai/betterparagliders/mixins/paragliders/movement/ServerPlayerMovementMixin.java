@@ -51,6 +51,8 @@ public abstract class ServerPlayerMovementMixin {
 
         player.setSprinting(false);
         player.setSwimming(false);
+        player.xxa = 0;
+        player.zza = 0;
 
         double sinkSpeed = BetterParaglidersConfig.drowningSinkSpeed();
         Vec3 motion = player.getDeltaMovement();
