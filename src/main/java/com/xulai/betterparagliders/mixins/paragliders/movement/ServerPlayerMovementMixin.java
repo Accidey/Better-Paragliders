@@ -55,7 +55,6 @@ public abstract class ServerPlayerMovementMixin {
         player.zza = 0;
 
         double sinkSpeed = BetterParaglidersConfig.drowningSinkSpeed();
-        Vec3 motion = player.getDeltaMovement();
-        player.setDeltaMovement(motion.x, -sinkSpeed, motion.z);
+        player.setDeltaMovement(0, -sinkSpeed, 0);
     }
 }

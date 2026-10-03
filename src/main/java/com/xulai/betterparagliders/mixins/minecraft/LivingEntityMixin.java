@@ -19,7 +19,7 @@ public abstract class LivingEntityMixin {
         if (player.isCreative() || player.isSpectator()) return;
 
         if (Movement.get(player).state().is(BetterParaglidersMovementPlugin.DROWNING)) {
-            cir.setReturnValue(Math.max(0, airSupply - 3));
+            cir.setReturnValue(airSupply - 3);
         }
     }
 }

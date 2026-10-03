@@ -8,12 +8,14 @@
     "paragliders.stamina.BotWStaminaMixin",
     "paragliders.movement.PlayerMovementMixin",
     "paragliders.movement.ServerPlayerMovementMixin",
-    "minecraft.LivingEntityMixin"
+    "minecraft.LivingEntityMixin",
+    "minecraft.PlayerAiStepMixin"
   ],
   "client": [
     "paragliders.client.ClientPlayerMovementMixin",
     "paragliders.client.InGameStaminaWheelRendererMixin",
-    "paragliders.client.GuiMixin"
+    "paragliders.client.GuiMixin",
+    "paragliders.client.LocalPlayerAiStepMixin"
   ],
   "injectors": {
     "defaultRequire": 1

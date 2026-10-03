@@ -10,7 +10,6 @@ import net.bettercombat.logic.PlayerAttackHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -40,8 +39,7 @@ public abstract class ClientPlayerMovementMixin {
             player.zza = 0;
 
             double sinkSpeed = BetterParaglidersConfig.drowningSinkSpeed();
-            Vec3 motion = player.getDeltaMovement();
-            player.setDeltaMovement(motion.x, -sinkSpeed, motion.z);
+            player.setDeltaMovement(0, -sinkSpeed, 0);
             return;
         }
 
