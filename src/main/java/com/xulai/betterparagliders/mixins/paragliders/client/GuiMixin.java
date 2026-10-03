@@ -26,7 +26,13 @@ public abstract class GuiMixin {
         if (maxHealth <= 0) return;
 
         float ratio = Math.max(0, Math.min(1, health / maxHealth));
-        int alpha = (int) ((1.0 - ratio) * 120);
+
+        int alpha;
+        if (ratio <= 0.1f) {
+            alpha = 255;
+        } else {
+            alpha = (int) ((1.0f - ratio) / 0.9f * 255);
+        }
         if (alpha <= 0) return;
 
         int width = minecraft.getWindow().getGuiScaledWidth();
