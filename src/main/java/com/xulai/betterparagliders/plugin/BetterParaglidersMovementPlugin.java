@@ -5,6 +5,7 @@ import com.xulai.betterparagliders.mixins.accessor.LivingEntityJumpAccessor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
+import tictim.paraglider.ParagliderUtils;
 import tictim.paraglider.api.movement.MovementPlugin;
 import tictim.paraglider.api.movement.PlayerStateCondition;
 import tictim.paraglider.api.plugin.ParagliderPlugin;
@@ -28,6 +29,7 @@ public class BetterParaglidersMovementPlugin implements MovementPlugin {
         PlayerStateCondition inWater = c -> c.player().isInWater();
         PlayerStateCondition depleted = c -> c.stamina().isDepleted();
         PlayerStateCondition holdingJump = c -> isJumping(c.player());
+        PlayerStateCondition canBreathe = c -> ParagliderUtils.canBreatheUnderwater(c.player());
 
         register.connect(tictim.paraglider.api.movement.ParagliderPlayerStates.IDLE, DROWNING,
                 c -> inWater.test(c) && depleted.test(c), 100);
@@ -46,6 +48,10 @@ public class BetterParaglidersMovementPlugin implements MovementPlugin {
                 c -> inWater.test(c) && !depleted.test(c) && holdingJump.test(c), 90);
         register.connect(tictim.paraglider.api.movement.ParagliderPlayerStates.BREATHING_UNDERWATER, FLOATING,
                 c -> inWater.test(c) && !depleted.test(c) && holdingJump.test(c), 90);
+
+        register.connect(tictim.paraglider.api.movement.ParagliderPlayerStates.IDLE,
+                tictim.paraglider.api.movement.ParagliderPlayerStates.UNDERWATER,
+                c -> inWater.test(c) && !depleted.test(c) && canBreathe.test(c), 6);
     }
 
     private static boolean isJumping(Player player) {

@@ -7,11 +7,13 @@
     "accessor.LivingEntityJumpAccessor",
     "paragliders.stamina.BotWStaminaMixin",
     "paragliders.movement.PlayerMovementMixin",
-    "paragliders.movement.ServerPlayerMovementMixin"
+    "paragliders.movement.ServerPlayerMovementMixin",
+    "minecraft.LivingEntityMixin"
   ],
   "client": [
     "paragliders.client.ClientPlayerMovementMixin",
-    "paragliders.client.InGameStaminaWheelRendererMixin"
+    "paragliders.client.InGameStaminaWheelRendererMixin",
+    "paragliders.client.GuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1
