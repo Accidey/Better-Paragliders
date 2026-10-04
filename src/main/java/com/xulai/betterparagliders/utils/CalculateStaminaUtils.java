@@ -135,10 +135,10 @@ public final class CalculateStaminaUtils {
     }
 
     public static boolean drainMiningStamina(ServerPlayer player, double amount) {
-        if (amount <= 0.0D) return true;
-        if (!hasEnoughStamina(player, toCost(amount))) return false;
-
-        Stamina.get(player).takeStamina(amount, false, true, false);
+        if (amount > 0.0D) {
+            if (!hasEnoughStamina(player, toCost(amount))) return false;
+            Stamina.get(player).takeStamina(amount, false, true, false);
+        }
         holdStaminaRecovery(player);
         return true;
     }

@@ -1,6 +1,7 @@
 package com.xulai.betterparagliders.events;
 
 import com.xulai.betterparagliders.BetterParaglidersMod;
+import com.xulai.betterparagliders.capabilities.MiningDrainTracker;
 import com.xulai.betterparagliders.config.BetterParaglidersConfig;
 import com.xulai.betterparagliders.utils.CalculateStaminaUtils;
 import net.bettercombat.logic.PlayerAttackHelper;
@@ -107,6 +108,22 @@ public final class BetterParaglidersEventHandler {
         }
 
         CalculateStaminaUtils.tryConsumeActionStamina(player, cost);
+    }
+
+    @SubscribeEvent
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        if (!(event.getPlayer() instanceof ServerPlayer player)) return;
+        if (player.isCreative() || player.isSpectator()) return;
+        if (!BetterParaglidersConfig.enableMiningStamina()) return;
+        if (!(player.gameMode instanceof MiningDrainTracker tracker)) return;
+        if (tracker.isDrained(event.getPos())) return;
+
+        double cost = CalculateStaminaUtils.getBlockStaminaCost(event.getState(), player.serverLevel(),
+                event.getPos(), player);
+        if (cost <= 0.0D) return;
+
+        if (CalculateStaminaUtils.drainMiningStamina(player, cost)) return;
+        if (BetterParaglidersConfig.blockMiningWithoutStamina()) event.setCanceled(true);
     }
 
     private static boolean canAfford(Player player, ItemStack stack) {
