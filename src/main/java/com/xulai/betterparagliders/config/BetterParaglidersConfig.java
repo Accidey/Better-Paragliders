@@ -144,6 +144,48 @@ public final class BetterParaglidersConfig {
                     " The player sinks steadily until reaching the bottom or drowning; holding space cannot lift them")
             .defineInRange("drowning_sink_speed", 0.1, 0.01, 5.0);
 
+    public static final ModConfigSpec.BooleanValue ENABLE_MINING_STAMINA = BUILDER
+            .comment("",
+                    " 是否启用挖掘/砍伐/耕地消耗耐力",
+                    " 关闭后，挖掘、砍伐、锄地都不会消耗耐力",
+                    " Whether mining, chopping and tilling consume stamina",
+                    " When disabled, digging, chopping and tilling cost no stamina")
+            .define("enable_mining_stamina", true);
+
+    public static final ModConfigSpec.DoubleValue MINING_STAMINA_PER_LOG = BUILDER
+            .comment("",
+                    " 挖掘/砍伐的耐力消耗基准，默认 53.3333",
+                    " 具体算法：基准 × (方块硬度 ÷ 2)，硬度以原木(硬度2)为基准等比例缩放",
+                    " 硬度为 0 的方块（草丛、花、火把等）不消耗耐力",
+                    " 不使用正确工具挖掘时（如空手挖石头），消耗翻倍",
+                    " 默认值 53.3333 使满耐力 1000 恰好能挖 18.75 块原木，或 25 块石头，与疾跑 1 秒 200 的消耗量级一致",
+                    " Base stamina cost for mining/chopping. Default 53.3333",
+                    " Formula: base x (block hardness / 2), scaled proportionally from logs (hardness 2)",
+                    " Blocks with hardness 0 (grass, flowers, torches, etc.) cost nothing",
+                    " Mining with the wrong tool (e.g. bare-handed stone) doubles the cost",
+                    " Default 53.3333 makes a full 1000 stamina wheel last for 18.75 logs, or 25 stone blocks, matching the sprint drain scale")
+            .defineInRange("mining_stamina_per_log", 53.333333333333336, 0.0, 10000.0);
+
+    public static final ModConfigSpec.DoubleValue TILLING_STAMINA_COST = BUILDER
+            .comment("",
+                    " 每耕一块地消耗的耐力，默认 40",
+                    " 所有工具改造动作都按这个数值扣除，包括锄地耕地、斧头去皮、铲子铲路等",
+                    " 40 = 满耐力 1000 恰好能耕 25 块地，与挖掘消耗量级一致",
+                    " 耐力不足 40 时无法耕地",
+                    " Stamina consumed per tilled farmland. Default 40",
+                    " Applies to every tool modification, such as hoeing, axe stripping and shovel pathing",
+                    " 40 = a full 1000 stamina wheel tills exactly 25 blocks, matching the mining scale",
+                    " Tilling is blocked when stamina is below 40")
+            .defineInRange("tilling_stamina_cost", 40.0, 0.0, 10000.0);
+
+    public static final ModConfigSpec.BooleanValue BLOCK_MINING_WITHOUT_STAMINA = BUILDER
+            .comment("",
+                    " 耐力不足以支付挖掘/砍伐消耗时，是否取消方块破坏",
+                    " 关闭后，耐力不足时仍可挖掘，只是不扣耐力",
+                    " Whether block breaking is cancelled when the player cannot pay the mining cost",
+                    " Disable this to let mining continue without consuming stamina when out of stamina")
+            .define("block_mining_without_stamina", true);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     public enum ItemCategory {
@@ -168,6 +210,10 @@ public final class BetterParaglidersConfig {
     private static volatile boolean blockSwingWithoutStamina = true;
     private static volatile int actionRecoveryDelay = 40;
     private static volatile double drowningSinkSpeed = 0.1;
+    private static volatile boolean enableMiningStamina = true;
+    private static volatile double miningStaminaPerLog = 53.333333333333336;
+    private static volatile double tillingStaminaCost = 40.0;
+    private static volatile boolean blockMiningWithoutStamina = true;
 
     private BetterParaglidersConfig() {}
 
@@ -198,14 +244,19 @@ public final class BetterParaglidersConfig {
         blockItemUseWithoutStamina = value(BLOCK_ITEM_USE_WITHOUT_STAMINA);
         blockSwingWithoutStamina = value(BLOCK_SWING_WITHOUT_STAMINA);
         drowningSinkSpeed = value(DROWNING_SINK_SPEED);
+        enableMiningStamina = value(ENABLE_MINING_STAMINA);
+        miningStaminaPerLog = value(MINING_STAMINA_PER_LOG);
+        tillingStaminaCost = value(TILLING_STAMINA_COST);
+        blockMiningWithoutStamina = value(BLOCK_MINING_WITHOUT_STAMINA);
 
         meleeOverrides = parseOverrides(value(MELEE_ITEM_OVERRIDES), "melee_item_overrides");
         rangedOverrides = parseOverrides(value(RANGED_ITEM_OVERRIDES), "ranged_item_overrides");
         shieldOverrides = parseOverrides(value(SHIELD_ITEM_OVERRIDES), "shield_item_overrides");
 
-        BetterParaglidersMod.LOGGER.info("Better Paragliders config loaded: melee={} ranged={} shield={} recoveryDelay={} overrides={}/{}/{}",
+        BetterParaglidersMod.LOGGER.info("Better Paragliders config loaded: melee={} ranged={} shield={} recoveryDelay={} overrides={}/{}/{} mining={} perLog={} till={} blockMining={}",
                 meleeCost, rangedCost, shieldCost, actionRecoveryDelay,
-                meleeOverrides.size(), rangedOverrides.size(), shieldOverrides.size());
+                meleeOverrides.size(), rangedOverrides.size(), shieldOverrides.size(),
+                enableMiningStamina, miningStaminaPerLog, tillingStaminaCost, blockMiningWithoutStamina);
     }
 
     private static Map<Item, Double> parseOverrides(List<? extends String> entries, String option) {
@@ -304,5 +355,21 @@ public final class BetterParaglidersConfig {
 
     public static double drowningSinkSpeed() {
         return drowningSinkSpeed;
+    }
+
+    public static boolean enableMiningStamina() {
+        return enableMiningStamina;
+    }
+
+    public static double miningStaminaPerLog() {
+        return miningStaminaPerLog;
+    }
+
+    public static double tillingStaminaCost() {
+        return tillingStaminaCost;
+    }
+
+    public static boolean blockMiningWithoutStamina() {
+        return blockMiningWithoutStamina;
     }
 }

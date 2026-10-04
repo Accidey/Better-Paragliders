@@ -8,6 +8,7 @@ import com.xulai.betterparagliders.network.ModNet;
 import net.bettercombat.api.WeaponAttributes;
 import net.bettercombat.logic.PlayerAttackHelper;
 import net.bettercombat.logic.WeaponRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +19,8 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.ItemAbilities;
 import tictim.paraglider.api.movement.Movement;
 import tictim.paraglider.api.stamina.Stamina;
@@ -107,6 +110,49 @@ public final class CalculateStaminaUtils {
         if (cost <= 0) return true;
         Stamina stamina = Stamina.get(player);
         return stamina.stamina() + stamina.extraStamina() >= cost;
+    }
+
+    public static double getBlockStaminaCost(BlockState state, Level level, BlockPos pos, Player player) {
+        if (!BetterParaglidersConfig.enableMiningStamina()) return 0.0D;
+        float hardness = state.getDestroySpeed(level, pos);
+        if (hardness <= 0.0F) return 0.0D;
+        double cost = BetterParaglidersConfig.miningStaminaPerLog() * (hardness / 2.0D);
+        if (usesWrongTool(state, player)) cost *= 2.0D;
+        return cost;
+    }
+
+    private static boolean usesWrongTool(BlockState state, Player player) {
+        if (!state.requiresCorrectToolForDrops()) return false;
+        return !player.getMainHandItem().isCorrectToolForDrops(state);
+    }
+
+    public static double getBlockStaminaDrain(BlockState state, Level level, BlockPos pos, Player player) {
+        double total = getBlockStaminaCost(state, level, pos, player);
+        if (total <= 0.0D) return 0.0D;
+        float progress = state.getDestroyProgress(player, level, pos);
+        if (progress <= 0.0F) return 0.0D;
+        return total * progress;
+    }
+
+    public static boolean drainMiningStamina(ServerPlayer player, double amount) {
+        if (amount <= 0.0D) return true;
+        if (!hasEnoughStamina(player, toCost(amount))) return false;
+
+        Stamina.get(player).takeStamina(amount, false, true, false);
+        holdStaminaRecovery(player);
+        return true;
+    }
+
+    private static void holdStaminaRecovery(ServerPlayer player) {
+        int delay = BetterParaglidersConfig.actionRecoveryDelay();
+        if (delay <= 0) return;
+        Movement movement = Movement.get(player);
+        movement.setRecoveryDelay(Math.max(movement.recoveryDelay(), delay));
+    }
+
+    public static int getTillStaminaCost() {
+        if (!BetterParaglidersConfig.enableMiningStamina()) return 0;
+        return toCost(BetterParaglidersConfig.tillingStaminaCost());
     }
 
     public static double getModifiedStaminaDelta(PlayerMovement movement) {

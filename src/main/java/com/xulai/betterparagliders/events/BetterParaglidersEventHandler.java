@@ -14,6 +14,7 @@ import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent;
 import net.neoforged.neoforge.event.entity.player.ArrowLooseEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 
 import java.util.Collections;
 import java.util.Map;
@@ -89,6 +90,23 @@ public final class BetterParaglidersEventHandler {
         if (CalculateStaminaUtils.isCrossbow(stack) && CrossbowItem.isCharged(stack)) return;
 
         if (!canAfford(player, stack)) player.stopUsingItem();
+    }
+
+    @SubscribeEvent
+    public static void onToolModification(BlockEvent.BlockToolModificationEvent event) {
+        if (event.isSimulated()) return;
+        if (!(event.getPlayer() instanceof ServerPlayer player)) return;
+        if (player.isCreative() || player.isSpectator()) return;
+
+        int cost = CalculateStaminaUtils.getTillStaminaCost();
+        if (cost <= 0) return;
+
+        if (!CalculateStaminaUtils.hasEnoughStamina(player, cost)) {
+            if (BetterParaglidersConfig.blockMiningWithoutStamina()) event.setCanceled(true);
+            return;
+        }
+
+        CalculateStaminaUtils.tryConsumeActionStamina(player, cost);
     }
 
     private static boolean canAfford(Player player, ItemStack stack) {

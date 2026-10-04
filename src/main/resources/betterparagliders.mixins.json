@@ -9,7 +9,8 @@
     "paragliders.movement.PlayerMovementMixin",
     "paragliders.movement.ServerPlayerMovementMixin",
     "minecraft.LivingEntityMixin",
-    "minecraft.PlayerAiStepMixin"
+    "minecraft.PlayerAiStepMixin",
+    "minecraft.ServerPlayerGameModeMixin"
   ],
   "client": [
     "paragliders.client.ClientPlayerMovementMixin",
