@@ -24,6 +24,19 @@ Paraglider 的附属模组：把 Paraglider 的耐力系统接到武器攻击、
 - 耐力不够付时，默认取消近战攻击、中断拉弓 / 弩蓄力 / 举盾（可各自关闭）。盾牌格挡照常生效但不扣耐力。
 - 保留了 22 个耐力属性（疾跑 / 游泳 / 水下 / 各类移动状态减免，以及近战 / 单手 / 双手 / 远程 / 格挡减免），可在属性修饰符里自由配置。
 
+### 死亡惩罚（心之容器）
+
+为了防止玩家通过无限死亡重生来磨死 BOSS，玩家每次死亡都会失去 1 个心之容器
+（可通过配置调整），每 1 个心之容器 = 1 颗额外红心 = 2 点最大生命值。
+
+- 惩罚只作用于 Paraglider 心之容器提供的**额外**生命上限，扣到 0 个容器
+  （初始 20 点生命 / 10 颗心）为止，不会低于初始值。
+- 心之容器为 0 时死亡不再扣减。
+- 免疫死亡（如不死图腾）不触发；创造 / 旁观模式不触发。
+- 玩家重生时会收到一条聊天提示（可配置关闭）。
+- 恢复方式：重新获得并食用心之容器物品，或由管理员使用 Paraglider 自带命令
+  `paraglider set heart <玩家> <数量>` 补回。
+
 ### 对主模组“耐力耗尽”机制的修改
 
 Paraglider 原本的 `isDepleted` 不是“耐力为 0”，而是“耐力耗尽后必须回到 `min(耐力上限, 3 格)` 才解除”。
@@ -51,9 +64,15 @@ action_recovery_delay = 40
 block_attack_without_stamina = true
 block_item_use_without_stamina = true
 block_swing_without_stamina = true
+
+death_heart_container_loss = 1
+send_death_penalty_message = true
 ```
 
 `action_recovery_delay` 单位为 tick（20 tick = 1 秒），设为 0 表示动作扣完耐力后立刻恢复；默认 40 = 动作后停 2 秒不回复。
+
+`death_heart_container_loss` 为每次死亡扣除的心之容器数量（默认 1，范围 1~20），
+`send_death_penalty_message` 控制是否发送扣减提示（默认开启）。
 
 物品覆盖表格式为 `物品ID=消耗`，例如：
 

@@ -30,5 +30,7 @@
   "command.betterparagliders.added": "已把 %s 写入%s物品的耐力消耗表，数值为 %s。",
   "command.betterparagliders.removed": "已把 %s 从所有耐力消耗表中移除。",
   "command.betterparagliders.not_configured": "%s 不在任何耐力消耗表中。",
-  "command.betterparagliders.unknown_category": "未知的物品类别：%s"
+  "command.betterparagliders.unknown_category": "未知的物品类别：%s",
+
+  "message.betterparagliders.death_penalty": "你因死亡失去了 %s 个心之容器，最大生命值已降低。"
 }
