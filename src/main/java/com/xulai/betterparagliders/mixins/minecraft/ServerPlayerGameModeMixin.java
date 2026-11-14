@@ -32,9 +32,10 @@ public abstract class ServerPlayerGameModeMixin implements MiningDrainTracker {
     @Unique
     private double betterparagliders$drainedAmount;
 
-    @Inject(method = "incrementDestroyProgress", at = @At("HEAD"))
+    @Inject(method = "incrementDestroyProgress", at = @At("HEAD"), cancellable = true)
     private void betterparagliders$drainMiningStamina(BlockState state, BlockPos pos, int startTick,
                                                      CallbackInfoReturnable<Float> cir) {
+        if (!player.canInteractWithBlock(pos, 1.0D)) return;
         if (!BetterParaglidersConfig.enableMiningStamina()) return;
         if (player.isCreative() || player.isSpectator()) return;
 

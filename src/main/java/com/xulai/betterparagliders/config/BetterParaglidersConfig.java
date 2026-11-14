@@ -59,6 +59,8 @@ public final class BetterParaglidersConfig {
                         "400 = exactly two seconds of the main mod's sprint drain (200/s x 2).",
                         "弓、弩以及任何 ProjectileWeaponItem 都按这个数值扣耐力。",
                         "Used by bows, crossbows and every ProjectileWeaponItem.",
+                        "投掷三叉戟同样按这个数值扣耐力，蓄力不足 10 tick 的快速点击不算投掷。",
+                        "Throwing a trident costs the same amount; a quick tap shorter than 10 ticks does not count as a throw.",
                         "想让某个物品用别的数值，把它加到下面的 ranged_item_overrides 里。",
                         "To give a single item its own value, add it to ranged_item_overrides below.",
                         "只要当前耐力够付这次消耗，这一箭就一定射得出去；付不起时按 block_item_use_without_stamina 处理。",
@@ -108,6 +110,8 @@ public final class BetterParaglidersConfig {
                         "Format: item_id=cost. The value overrides ranged_stamina_cost instead of adding to it.",
                         "写进这张表的物品会被当作远程武器对待，即使它本身不是弓或弩。",
                         "Items listed here are treated as ranged weapons even if they are not bows or crossbows.",
+                        "投掷三叉戟的消耗也读这张表，可以把 minecraft:trident 加进来单独设定投掷消耗。",
+                        "Trident throws read this list too, so minecraft:trident can be added here to set its throw cost separately.",
                         "示例：minecraft:crossbow=500 表示弩每次射击消耗 500 点耐力。",
                         "Example: minecraft:crossbow=500 makes the crossbow cost 500 stamina per shot.",
                         "游戏内可用指令直接写入主手物品：/betterparagliders additem ranged [消耗]。",
@@ -163,8 +167,8 @@ public final class BetterParaglidersConfig {
         BLOCK_ITEM_USE_WITHOUT_STAMINA = BUILDER
                 .comment("耐力不足时是否强制中断需要耐力的物品使用",
                         "Whether to interrupt stamina-consuming item use when out of stamina",
-                        "包括拉弓、弩蓄力、举盾。弩已经装填好的时候不受影响，只有正在蓄力才会被打断。",
-                        "Covers drawing a bow, charging a crossbow and raising a shield. An already loaded crossbow is unaffected; only an in-progress charge gets interrupted.",
+                        "包括拉弓、弩蓄力、举盾、投掷三叉戟。弩已经装填好的时候不受影响，只有正在蓄力才会被打断。",
+                        "Covers drawing a bow, charging a crossbow, raising a shield and throwing a trident. An already loaded crossbow is unaffected; only an in-progress charge gets interrupted.",
                         "Default: true / 默认：true")
                 .define("block_item_use_without_stamina", true);
 

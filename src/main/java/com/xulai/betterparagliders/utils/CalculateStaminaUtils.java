@@ -19,6 +19,8 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.item.TridentItem;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.ItemAbilities;
@@ -44,6 +46,18 @@ public final class CalculateStaminaUtils {
 
     public static boolean isCrossbow(ItemStack stack) {
         return stack.getItem() instanceof CrossbowItem;
+    }
+
+    public static boolean isTrident(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        return stack.getItem() instanceof TridentItem;
+    }
+
+    public static boolean isChargedThrow(ItemStack stack, Player player, int remainingTicks) {
+        if (!isTrident(stack)) return false;
+        int usedTicks = stack.getItem().getUseDuration(stack, player) - remainingTicks;
+        if (usedTicks < TridentItem.THROW_THRESHOLD_TIME) return false;
+        return EnchantmentHelper.getTridentSpinAttackStrength(stack, player) <= 0.0F || player.isInWaterOrRain();
     }
 
     public static boolean isHandledByBetterCombat(ItemStack stack) {
@@ -135,10 +149,12 @@ public final class CalculateStaminaUtils {
     }
 
     public static boolean drainMiningStamina(ServerPlayer player, double amount) {
-        if (amount > 0.0D) {
-            if (!hasEnoughStamina(player, toCost(amount))) return false;
-            Stamina.get(player).takeStamina(amount, false, true, false);
-        }
+        if (!(amount > 0.0D)) return true;
+        if (!hasEnoughStamina(player, toCost(amount))) return false;
+
+        Stamina stamina = Stamina.get(player);
+        stamina.takeStamina(amount, false, true, false);
+        stamina.setDirty(true);
         holdStaminaRecovery(player);
         return true;
     }

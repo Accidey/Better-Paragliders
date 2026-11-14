@@ -94,6 +94,23 @@ public final class BetterParaglidersEventHandler {
     }
 
     @SubscribeEvent
+    public static void onUseItemStop(LivingEntityUseItemEvent.Stop event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (player.isCreative() || player.isSpectator()) return;
+
+        ItemStack stack = event.getItem();
+        if (!CalculateStaminaUtils.isChargedThrow(stack, player, event.getDuration())) return;
+
+        int cost = CalculateStaminaUtils.calculateRangedStaminaCost(player, stack);
+        if (!CalculateStaminaUtils.hasEnoughStamina(player, cost)) {
+            if (BetterParaglidersConfig.blockItemUseWithoutStamina()) event.setCanceled(true);
+            return;
+        }
+
+        CalculateStaminaUtils.tryConsumeActionStamina(player, cost);
+    }
+
+    @SubscribeEvent
     public static void onToolModification(BlockEvent.BlockToolModificationEvent event) {
         if (event.isSimulated()) return;
         if (!(event.getPlayer() instanceof ServerPlayer player)) return;
