@@ -36,13 +36,28 @@ An add-on for Paraglider that carries stamina out of movement and into combat, g
 
 ## 🎛️ Tuning
 
-Server-side, applied without a restart:
+Server-side settings:
 
 - Base costs for the three combat categories, plus the post-action regeneration pause.
 - Per-item overrides for each category. An item listed as ranged or shield is treated as one even if it is neither, and operators can register the held item with a single in-game command.
 - Switches for refusing attacks, item use and mining on an empty wheel; drowning sink speed; gathering costs; containers lost per death and its notice.
 - Twenty-two player attributes covering movement drains, idle regeneration and the new combat costs, for packs that want finer control.
 - The wheel displays the cost of the action just paid.
+
+## ⌨️ Commands
+
+Both commands require permission level 2 and act on the item in your main hand. Changes are written and applied immediately, with no restart.
+
+- `/betterparagliders additem <melee|ranged|shield> [cost]` — adds the held item to that category's cost list. Omitting the cost uses the category default.
+- `/betterparagliders removeitem <melee|ranged|shield>` — removes the held item from every cost list.
+- `/bp` is a shorthand for `/betterparagliders`.
+
+## 🗂️ Configuration
+
+- The server-side file is `betterparagliders-server.toml`: in a single-player world it sits in that world's `serverconfig` folder, on a dedicated server in `config`. Every option carries a bilingual comment.
+- Saving the file applies the change without restarting the game or the server.
+- It holds the three base costs, the per-item lists, the recovery pause, the refusal switches, the drowning sink speed, the gathering costs and the death penalty settings.
+- The commands above edit the same file, so manual edits and in-game edits do not conflict.
 
 ## 📝 Notes
 
@@ -97,13 +112,28 @@ Bug reports and suggestions are welcome in the issue tracker. Please include the
 
 ## 🎛️ 配置
 
-全部为服务端配置，改动无需重启：
+全部为服务端配置：
 
 - 三类战斗动作的基础消耗，以及动作后的恢复等待时间。
 - 每个类别都支持按物品单独定价。被列入远程或盾牌的物品，即使本身不是弓或盾牌也按该类处理；管理员可用一条游戏内指令登记主手物品。
 - 耐力不足时是否拒绝攻击、物品使用与挖掘的开关；溺水下沉速度；采集消耗；每次死亡损失的心之容器数量与提示。
 - 22 个玩家属性，覆盖移动消耗、静止恢复与新增的战斗消耗，便于整合包精细调整。
 - 耐力圈会显示刚刚支付的消耗。
+
+## ⌨️ 指令
+
+两条指令均需权限等级 2（OP），作用于主手物品，执行后立即写入并生效，无需重启。
+
+- `/betterparagliders additem <melee|ranged|shield> [消耗]` —— 把主手物品写入对应类别的消耗表；省略消耗时使用该类别的默认值。
+- `/betterparagliders removeitem <melee|ranged|shield>` —— 把主手物品从所有消耗表中移除。
+- `/bp` 是 `/betterparagliders` 的简写。
+
+## 🗂️ 配置文件
+
+- 服务端配置文件为 `betterparagliders-server.toml`：单人存档位于该存档的 `serverconfig` 目录，专用服务器位于 `config` 目录，每一项都带中英双语注释。
+- 保存文件即生效，无需重启游戏或服务器。
+- 内容包含三类基础消耗、按物品覆盖表、恢复等待时间、拒绝开关、溺水下沉速度、采集消耗与死亡惩罚。
+- 上面的指令修改的是同一个文件，手动编辑与游戏内指令不会互相冲突。
 
 ## 📝 说明
 
