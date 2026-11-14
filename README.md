@@ -54,8 +54,8 @@ Both commands require permission level 2 and act on the item in your main hand. 
 
 ## 🗂️ Configuration
 
-- The server-side file is `betterparagliders-server.toml`: in a single-player world it sits in that world's `serverconfig` folder, on a dedicated server in `config`. Every option carries a bilingual comment.
-- Saving the file applies the change without restarting the game or the server.
+- One file only: `config/betterparagliders-server.toml`, the same path for single-player and dedicated servers. Every option carries a bilingual comment.
+- Saving the file applies the change immediately, with no game or server restart.
 - It holds the three base costs, the per-item lists, the recovery pause, the refusal switches, the drowning sink speed, the gathering costs and the death penalty settings.
 - The commands above edit the same file, so manual edits and in-game edits do not conflict.
 
@@ -130,8 +130,8 @@ Bug reports and suggestions are welcome in the issue tracker. Please include the
 
 ## 🗂️ 配置文件
 
-- 服务端配置文件为 `betterparagliders-server.toml`：单人存档位于该存档的 `serverconfig` 目录，专用服务器位于 `config` 目录，每一项都带中英双语注释。
-- 保存文件即生效，无需重启游戏或服务器。
+- 只有一个配置文件：`config/betterparagliders-server.toml`，单人存档与专用服务器路径相同，每一项都带中英双语注释。
+- 保存文件立即生效，无需重启游戏或服务器。
 - 内容包含三类基础消耗、按物品覆盖表、恢复等待时间、拒绝开关、溺水下沉速度、采集消耗与死亡惩罚。
 - 上面的指令修改的是同一个文件，手动编辑与游戏内指令不会互相冲突。
 
