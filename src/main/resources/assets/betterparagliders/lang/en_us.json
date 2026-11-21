@@ -30,8 +30,8 @@
   "command.betterparagliders.not_configured": "%s is not present in any stamina cost list.",
   "command.betterparagliders.unknown_category": "Unknown item category: %s",
   "message.betterparagliders.death_penalty": "You lost %s heart container(s) to death. Your maximum health has been reduced.",
-  "effect.stamina_efficiency": "Stamina Efficiency",
-  "effect.sprint_efficiency": "Sprint Efficiency",
+  "effect.betterparagliders.stamina_efficiency": "Stamina Efficiency",
+  "effect.betterparagliders.sprint_efficiency": "Sprint Efficiency",
   "item.minecraft.potion.effect.archery": "Archer's Potion",
   "item.minecraft.splash_potion.effect.archery": "Archer's Potion",
   "item.minecraft.lingering_potion.effect.archery": "Archer's Potion",
@@ -44,6 +44,6 @@
   "item.minecraft.splash_potion.effect.strong_archery": "Strong Archer's Potion",
   "item.minecraft.lingering_potion.effect.strong_archery": "Strong Archer's Potion",
   "item.minecraft.tipped_arrow.effect.strong_archery": "Strong Archer's Potion",
-  "effect.archery_power": "Archery Power",
-  "effect.archery_efficiency": "Archery Efficiency"
+  "effect.betterparagliders.archery_power": "Archery Power",
+  "effect.betterparagliders.archery_efficiency": "Archery Efficiency"
 }

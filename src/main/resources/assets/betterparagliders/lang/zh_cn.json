@@ -30,8 +30,8 @@
   "command.betterparagliders.not_configured": "%s 不在任何耐力消耗表中。",
   "command.betterparagliders.unknown_category": "未知的物品类别：%s",
   "message.betterparagliders.death_penalty": "你因死亡失去了 %s 个心之容器，最大生命值已降低。",
-  "effect.stamina_efficiency": "耐力效率",
-  "effect.sprint_efficiency": "冲刺效率",
+  "effect.betterparagliders.stamina_efficiency": "耐力效率",
+  "effect.betterparagliders.sprint_efficiency": "冲刺效率",
   "item.minecraft.potion.effect.archery": "射手药剂",
   "item.minecraft.splash_potion.effect.archery": "射手药剂",
   "item.minecraft.lingering_potion.effect.archery": "射手药剂",
@@ -44,6 +44,6 @@
   "item.minecraft.splash_potion.effect.strong_archery": "强效射手药剂",
   "item.minecraft.lingering_potion.effect.strong_archery": "强效射手药剂",
   "item.minecraft.tipped_arrow.effect.strong_archery": "强效射手药剂",
-  "effect.archery_power": "弓弩伤害提升",
-  "effect.archery_efficiency": "弓弩效率"
+  "effect.betterparagliders.archery_power": "弓弩伤害提升",
+  "effect.betterparagliders.archery_efficiency": "弓弩效率"
 }
