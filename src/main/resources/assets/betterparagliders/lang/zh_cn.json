@@ -32,5 +32,8 @@
   "command.betterparagliders.not_configured": "%s 不在任何耐力消耗表中。",
   "command.betterparagliders.unknown_category": "未知的物品类别：%s",
 
-  "message.betterparagliders.death_penalty": "你因死亡失去了 %s 个心之容器，最大生命值已降低。"
+  "message.betterparagliders.death_penalty": "你因死亡失去了 %s 个心之容器，最大生命值已降低。",
+
+  "effect.betterparagliders.stamina_efficiency": "耐力效率",
+  "effect.betterparagliders.sprint_efficiency": "冲刺效率"
 }

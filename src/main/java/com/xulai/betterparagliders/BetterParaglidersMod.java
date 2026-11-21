@@ -3,11 +3,19 @@ package com.xulai.betterparagliders;
 import com.xulai.betterparagliders.attributes.BetterParaglidersAttributes;
 import com.xulai.betterparagliders.config.BetterParaglidersConfig;
 import com.xulai.betterparagliders.network.ModNet;
+import com.xulai.betterparagliders.potion.BrewingRecipes;
+import com.xulai.betterparagliders.potion.PotionEffects;
+import com.xulai.betterparagliders.potion.PotionPatcher;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,16 +24,40 @@ import org.apache.logging.log4j.Logger;
 public class BetterParaglidersMod {
 
     public static final String MOD_ID = "betterparagliders";
-    public static final Logger LOGGER = LogManager.getLogger("BetterParagliders");
+    public static final Logger LOGGER = LogManager.getLogger("Better Paragliders");
 
     public BetterParaglidersMod(IEventBus modEventBus, ModContainer modContainer) {
         BetterParaglidersAttributes.register(modEventBus);
+        PotionEffects.EFFECTS.register(modEventBus);
         ModNet.register(modEventBus);
 
         modEventBus.addListener(BetterParaglidersConfig::onConfigEvent);
         modEventBus.addListener(BetterParaglidersMod::onEntityAttributeModification);
+        modEventBus.addListener(BetterParaglidersMod::onCommonSetup);
+        modEventBus.addListener(BetterParaglidersMod::onRegisterClientExtensions);
+        NeoForge.EVENT_BUS.addListener(BrewingRecipes::onRegisterBrewingRecipes);
+        NeoForge.EVENT_BUS.addListener(PotionEffects::hideInvisibleEffectParticles);
 
         modContainer.registerConfig(ModConfig.Type.SERVER, BetterParaglidersConfig.SPEC);
+    }
+
+    private static void onCommonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(PotionPatcher::apply);
+    }
+
+    private static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+        event.registerMobEffect(new IClientMobEffectExtensions() {
+
+            @Override
+            public boolean isVisibleInInventory(MobEffectInstance instance) {
+                return false;
+            }
+
+            @Override
+            public boolean isVisibleInGui(MobEffectInstance instance) {
+                return false;
+            }
+        }, PotionEffects.STAMINA_EFFICIENCY, PotionEffects.SPRINT_EFFICIENCY);
     }
 
     private static void onEntityAttributeModification(EntityAttributeModificationEvent event) {

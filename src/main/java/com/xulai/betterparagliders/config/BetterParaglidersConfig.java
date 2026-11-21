@@ -1,6 +1,7 @@
 package com.xulai.betterparagliders.config;
 
 import com.xulai.betterparagliders.BetterParaglidersMod;
+import com.xulai.betterparagliders.potion.PotionPatcher;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -33,6 +34,18 @@ public final class BetterParaglidersConfig {
     public static final ModConfigSpec.BooleanValue BLOCK_MINING_WITHOUT_STAMINA;
     public static final ModConfigSpec.IntValue DEATH_HEART_CONTAINER_LOSS;
     public static final ModConfigSpec.BooleanValue SEND_DEATH_PENALTY_MESSAGE;
+    public static final ModConfigSpec.DoubleValue STRENGTH_STAMINA_DISCOUNT;
+    public static final ModConfigSpec.DoubleValue LONG_STRENGTH_STAMINA_DISCOUNT;
+    public static final ModConfigSpec.DoubleValue STRONG_STRENGTH_STAMINA_DISCOUNT;
+    public static final ModConfigSpec.DoubleValue SWIFTNESS_SPRINT_STAMINA_DISCOUNT;
+    public static final ModConfigSpec.DoubleValue LONG_SWIFTNESS_SPRINT_STAMINA_DISCOUNT;
+    public static final ModConfigSpec.DoubleValue STRONG_SWIFTNESS_SPRINT_STAMINA_DISCOUNT;
+    public static final ModConfigSpec.IntValue STRENGTH_DURATION_SECONDS;
+    public static final ModConfigSpec.IntValue LONG_STRENGTH_DURATION_SECONDS;
+    public static final ModConfigSpec.IntValue STRONG_STRENGTH_DURATION_SECONDS;
+    public static final ModConfigSpec.IntValue SWIFTNESS_DURATION_SECONDS;
+    public static final ModConfigSpec.IntValue LONG_SWIFTNESS_DURATION_SECONDS;
+    public static final ModConfigSpec.IntValue STRONG_SWIFTNESS_DURATION_SECONDS;
 
     static {
         MELEE_STAMINA_COST = BUILDER
@@ -271,6 +284,142 @@ public final class BetterParaglidersConfig {
                         "When enabled, the player receives a message after respawning explaining how many heart containers were lost.",
                         "Default: true / 默认：true")
                 .define("send_death_penalty_message", true);
+
+        BUILDER.comment(" ");
+
+        STRENGTH_STAMINA_DISCOUNT = BUILDER
+                .comment("力量药水附带的耐力效率效果对近战与格挡消耗的减免比例",
+                        "Melee and block stamina discount granted by the stamina efficiency effect of strength potions",
+                        "喝下力量药水后获得的耐力效率等级 0 对应这个数值，等级更高时往上收敛，不会更低。",
+                        "Stamina efficiency level 0 from strength potions maps to this value; higher levels never discount less.",
+                        "只作用于近战与格挡，不影响远程、挖掘与耕地。",
+                        "Applies to melee and blocking only, not to ranged attacks, mining or tilling.",
+                        "Default: 0.10 / 默认：0.10",
+                        "Range: 0.0 ~ 1.0")
+                .defineInRange("strengthStaminaDiscount", 0.10, 0.0, 1.0);
+
+        BUILDER.comment(" ");
+
+        LONG_STRENGTH_STAMINA_DISCOUNT = BUILDER
+                .comment("长效力量药水附带的耐力效率效果对近战与格挡消耗的减免比例",
+                        "Melee and block stamina discount granted by the stamina efficiency effect of long strength potions",
+                        "长效力量药水给的是耐力效率等级 1，对应这个数值。",
+                        "Long strength potions grant stamina efficiency level 1, which maps to this value.",
+                        "Default: 0.20 / 默认：0.20",
+                        "Range: 0.0 ~ 1.0")
+                .defineInRange("longStrengthStaminaDiscount", 0.20, 0.0, 1.0);
+
+        BUILDER.comment(" ");
+
+        STRONG_STRENGTH_STAMINA_DISCOUNT = BUILDER
+                .comment("强效力量药水附带的耐力效率效果对近战与格挡消耗的减免比例",
+                        "Melee and block stamina discount granted by the stamina efficiency effect of strong strength potions",
+                        "强效力量药水给的是耐力效率等级 2，等级 2 及以上都对应这个数值。",
+                        "Strong strength potions grant stamina efficiency level 2; level 2 and above map to this value.",
+                        "Default: 0.30 / 默认：0.30",
+                        "Range: 0.0 ~ 1.0")
+                .defineInRange("strongStrengthStaminaDiscount", 0.30, 0.0, 1.0);
+
+        BUILDER.comment(" ");
+
+        SWIFTNESS_SPRINT_STAMINA_DISCOUNT = BUILDER
+                .comment("迅捷药水附带的冲刺效率效果对冲刺与游泳消耗的减免比例",
+                        "Sprint and swim stamina discount granted by the sprint efficiency effect of swiftness potions",
+                        "喝下迅捷药水后获得的冲刺效率等级 0 对应这个数值，等级更高时往上收敛，不会更低。",
+                        "Sprint efficiency level 0 from swiftness potions maps to this value; higher levels never discount less.",
+                        "只作用于奔跑与游泳的耐力增量，不影响滑翔、攀爬等其它移动状态。",
+                        "Applies to the running and swimming stamina drain only, not to gliding, climbing or other movement states.",
+                        "Default: 0.10 / 默认：0.10",
+                        "Range: 0.0 ~ 1.0")
+                .defineInRange("swiftnessSprintStaminaDiscount", 0.10, 0.0, 1.0);
+
+        BUILDER.comment(" ");
+
+        LONG_SWIFTNESS_SPRINT_STAMINA_DISCOUNT = BUILDER
+                .comment("长效迅捷药水附带的冲刺效率效果对冲刺与游泳消耗的减免比例",
+                        "Sprint and swim stamina discount granted by the sprint efficiency effect of long swiftness potions",
+                        "长效迅捷药水给的是冲刺效率等级 1，对应这个数值。",
+                        "Long swiftness potions grant sprint efficiency level 1, which maps to this value.",
+                        "Default: 0.20 / 默认：0.20",
+                        "Range: 0.0 ~ 1.0")
+                .defineInRange("longSwiftnessSprintStaminaDiscount", 0.20, 0.0, 1.0);
+
+        BUILDER.comment(" ");
+
+        STRONG_SWIFTNESS_SPRINT_STAMINA_DISCOUNT = BUILDER
+                .comment("强效迅捷药水附带的冲刺效率效果对冲刺与游泳消耗的减免比例",
+                        "Sprint and swim stamina discount granted by the sprint efficiency effect of strong swiftness potions",
+                        "强效迅捷药水给的是冲刺效率等级 2，等级 2 及以上都对应这个数值。",
+                        "Strong swiftness potions grant sprint efficiency level 2; level 2 and above map to this value.",
+                        "Default: 0.30 / 默认：0.30",
+                        "Range: 0.0 ~ 1.0")
+                .defineInRange("strongSwiftnessSprintStaminaDiscount", 0.30, 0.0, 1.0);
+
+        BUILDER.comment(" ");
+
+        STRENGTH_DURATION_SECONDS = BUILDER
+                .comment("力量药水效果时长（秒）",
+                        "Strength potion effect duration in seconds",
+                        "同时决定力量效果与耐力效率效果的持续时长。修改后立即作用于所有已有药水，无需重新酿造。",
+                        "Applies to both the strength effect and its stamina efficiency effect. Affects already brewed potions immediately.",
+                        "Default: 180 / 默认：180",
+                        "Range: 1 ~ 7200")
+                .defineInRange("strengthDurationSeconds", 180, 1, 7200);
+
+        BUILDER.comment(" ");
+
+        LONG_STRENGTH_DURATION_SECONDS = BUILDER
+                .comment("长效力量药水效果时长（秒）",
+                        "Long strength potion effect duration in seconds",
+                        "同时决定力量效果与耐力效率效果的持续时长。修改后立即作用于所有已有药水，无需重新酿造。",
+                        "Applies to both the strength effect and its stamina efficiency effect. Affects already brewed potions immediately.",
+                        "Default: 480 / 默认：480",
+                        "Range: 1 ~ 7200")
+                .defineInRange("longStrengthDurationSeconds", 480, 1, 7200);
+
+        BUILDER.comment(" ");
+
+        STRONG_STRENGTH_DURATION_SECONDS = BUILDER
+                .comment("强效力量药水效果时长（秒）",
+                        "Strong strength potion effect duration in seconds",
+                        "同时决定力量效果与耐力效率效果的持续时长。原版只有 90 秒，这里默认放大到 15 分钟。修改后立即作用于所有已有药水，无需重新酿造。",
+                        "Applies to both the strength effect and its stamina efficiency effect. Vanilla is 90 seconds; the default extends it to 15 minutes. Affects already brewed potions immediately.",
+                        "Default: 900 / 默认：900",
+                        "Range: 1 ~ 7200")
+                .defineInRange("strongStrengthDurationSeconds", 900, 1, 7200);
+
+        BUILDER.comment(" ");
+
+        SWIFTNESS_DURATION_SECONDS = BUILDER
+                .comment("迅捷药水效果时长（秒）",
+                        "Swiftness potion effect duration in seconds",
+                        "同时决定迅捷效果与冲刺效率效果的持续时长。修改后立即作用于所有已有药水，无需重新酿造。",
+                        "Applies to both the swiftness effect and its sprint efficiency effect. Affects already brewed potions immediately.",
+                        "Default: 180 / 默认：180",
+                        "Range: 1 ~ 7200")
+                .defineInRange("swiftnessDurationSeconds", 180, 1, 7200);
+
+        BUILDER.comment(" ");
+
+        LONG_SWIFTNESS_DURATION_SECONDS = BUILDER
+                .comment("长效迅捷药水效果时长（秒）",
+                        "Long swiftness potion effect duration in seconds",
+                        "同时决定迅捷效果与冲刺效率效果的持续时长。修改后立即作用于所有已有药水，无需重新酿造。",
+                        "Applies to both the swiftness effect and its sprint efficiency effect. Affects already brewed potions immediately.",
+                        "Default: 480 / 默认：480",
+                        "Range: 1 ~ 7200")
+                .defineInRange("longSwiftnessDurationSeconds", 480, 1, 7200);
+
+        BUILDER.comment(" ");
+
+        STRONG_SWIFTNESS_DURATION_SECONDS = BUILDER
+                .comment("强效迅捷药水效果时长（秒）",
+                        "Strong swiftness potion effect duration in seconds",
+                        "同时决定迅捷效果与冲刺效率效果的持续时长。原版只有 90 秒，这里默认放大到 15 分钟。修改后立即作用于所有已有药水，无需重新酿造。",
+                        "Applies to both the swiftness effect and its sprint efficiency effect. Vanilla is 90 seconds; the default extends it to 15 minutes. Affects already brewed potions immediately.",
+                        "Default: 900 / 默认：900",
+                        "Range: 1 ~ 7200")
+                .defineInRange("strongSwiftnessDurationSeconds", 900, 1, 7200);
     }
 
     public static final ModConfigSpec SPEC = BUILDER.build();
@@ -292,6 +441,18 @@ public final class BetterParaglidersConfig {
     private static volatile boolean blockMiningWithoutStamina = true;
     private static volatile int deathHeartContainerLoss = 1;
     private static volatile boolean sendDeathPenaltyMessage = true;
+    private static volatile double strengthStaminaDiscount = 0.10;
+    private static volatile double longStrengthStaminaDiscount = 0.20;
+    private static volatile double strongStrengthStaminaDiscount = 0.30;
+    private static volatile double swiftnessSprintStaminaDiscount = 0.10;
+    private static volatile double longSwiftnessSprintStaminaDiscount = 0.20;
+    private static volatile double strongSwiftnessSprintStaminaDiscount = 0.30;
+    private static volatile int strengthDurationSeconds = 180;
+    private static volatile int longStrengthDurationSeconds = 480;
+    private static volatile int strongStrengthDurationSeconds = 900;
+    private static volatile int swiftnessDurationSeconds = 180;
+    private static volatile int longSwiftnessDurationSeconds = 480;
+    private static volatile int strongSwiftnessDurationSeconds = 900;
 
     private BetterParaglidersConfig() {}
 
@@ -322,6 +483,10 @@ public final class BetterParaglidersConfig {
         if (event.getConfig().getSpec() != SPEC) return;
         if (event instanceof ModConfigEvent.Unloading) return;
         reload();
+        if (PotionPatcher.isPatched()) {
+            PotionPatcher.apply();
+            BetterParaglidersMod.LOGGER.info("Better Paragliders potion effects reapplied from config");
+        }
     }
 
     public static void reload() {
@@ -339,6 +504,18 @@ public final class BetterParaglidersConfig {
         blockMiningWithoutStamina = value(BLOCK_MINING_WITHOUT_STAMINA);
         deathHeartContainerLoss = value(DEATH_HEART_CONTAINER_LOSS);
         sendDeathPenaltyMessage = value(SEND_DEATH_PENALTY_MESSAGE);
+        strengthStaminaDiscount = value(STRENGTH_STAMINA_DISCOUNT);
+        longStrengthStaminaDiscount = value(LONG_STRENGTH_STAMINA_DISCOUNT);
+        strongStrengthStaminaDiscount = value(STRONG_STRENGTH_STAMINA_DISCOUNT);
+        swiftnessSprintStaminaDiscount = value(SWIFTNESS_SPRINT_STAMINA_DISCOUNT);
+        longSwiftnessSprintStaminaDiscount = value(LONG_SWIFTNESS_SPRINT_STAMINA_DISCOUNT);
+        strongSwiftnessSprintStaminaDiscount = value(STRONG_SWIFTNESS_SPRINT_STAMINA_DISCOUNT);
+        strengthDurationSeconds = value(STRENGTH_DURATION_SECONDS);
+        longStrengthDurationSeconds = value(LONG_STRENGTH_DURATION_SECONDS);
+        strongStrengthDurationSeconds = value(STRONG_STRENGTH_DURATION_SECONDS);
+        swiftnessDurationSeconds = value(SWIFTNESS_DURATION_SECONDS);
+        longSwiftnessDurationSeconds = value(LONG_SWIFTNESS_DURATION_SECONDS);
+        strongSwiftnessDurationSeconds = value(STRONG_SWIFTNESS_DURATION_SECONDS);
 
         meleeOverrides = parseOverrides(value(MELEE_ITEM_OVERRIDES), "melee_item_overrides");
         rangedOverrides = parseOverrides(value(RANGED_ITEM_OVERRIDES), "ranged_item_overrides");
@@ -471,5 +648,41 @@ public final class BetterParaglidersConfig {
 
     public static boolean sendDeathPenaltyMessage() {
         return sendDeathPenaltyMessage;
+    }
+
+    public static double staminaEfficiencyDiscount(int amplifier) {
+        if (amplifier <= 0) return strengthStaminaDiscount;
+        if (amplifier == 1) return longStrengthStaminaDiscount;
+        return strongStrengthStaminaDiscount;
+    }
+
+    public static double sprintEfficiencyDiscount(int amplifier) {
+        if (amplifier <= 0) return swiftnessSprintStaminaDiscount;
+        if (amplifier == 1) return longSwiftnessSprintStaminaDiscount;
+        return strongSwiftnessSprintStaminaDiscount;
+    }
+
+    public static int strengthDurationSeconds() {
+        return strengthDurationSeconds;
+    }
+
+    public static int longStrengthDurationSeconds() {
+        return longStrengthDurationSeconds;
+    }
+
+    public static int strongStrengthDurationSeconds() {
+        return strongStrengthDurationSeconds;
+    }
+
+    public static int swiftnessDurationSeconds() {
+        return swiftnessDurationSeconds;
+    }
+
+    public static int longSwiftnessDurationSeconds() {
+        return longSwiftnessDurationSeconds;
+    }
+
+    public static int strongSwiftnessDurationSeconds() {
+        return strongSwiftnessDurationSeconds;
     }
 }

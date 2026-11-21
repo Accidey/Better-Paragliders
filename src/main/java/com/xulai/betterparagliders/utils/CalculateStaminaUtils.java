@@ -1,9 +1,10 @@
 package com.xulai.betterparagliders.utils;
 
-import com.xulai.betterparagliders.attributes.BetterParaglidersAttributes;
-import com.xulai.betterparagliders.capabilities.StaminaOverride;
 import com.xulai.betterparagliders.config.BetterParaglidersConfig;
 import com.xulai.betterparagliders.config.BetterParaglidersConfig.ItemCategory;
+import com.xulai.betterparagliders.potion.PotionEffects;
+import com.xulai.betterparagliders.attributes.BetterParaglidersAttributes;
+import com.xulai.betterparagliders.capabilities.StaminaOverride;
 import com.xulai.betterparagliders.network.ModNet;
 import net.bettercombat.api.WeaponAttributes;
 import net.bettercombat.logic.PlayerAttackHelper;
@@ -13,6 +14,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CrossbowItem;
@@ -29,6 +31,8 @@ import tictim.paraglider.api.stamina.Stamina;
 import tictim.paraglider.impl.movement.PlayerMovement;
 
 public final class CalculateStaminaUtils {
+
+    public static final int DEPLETION_RECOVERY_DELAY_TICKS = 100;
 
     private CalculateStaminaUtils() {}
 
@@ -84,7 +88,7 @@ public final class CalculateStaminaUtils {
             cost -= player.getAttributeValue(BetterParaglidersAttributes.ONE_HANDED_STAMINA_REDUCTION);
         }
         cost -= player.getAttributeValue(BetterParaglidersAttributes.BASE_MELEE_STAMINA_REDUCTION);
-        return toCost(cost);
+        return toCost(applyDiscount(player, cost));
     }
 
     public static int calculateRangedStaminaCost(Player player, ItemStack stack) {
@@ -96,7 +100,7 @@ public final class CalculateStaminaUtils {
     public static int calculateBlockStaminaCost(Player player, ItemStack stack) {
         double cost = BetterParaglidersConfig.costOf(ItemCategory.SHIELD, stack.getItem());
         cost -= player.getAttributeValue(BetterParaglidersAttributes.BLOCK_STAMINA_REDUCTION);
-        return toCost(cost);
+        return toCost(applyDiscount(player, cost));
     }
 
     public static boolean tryConsumeActionStamina(ServerPlayer player, int cost) {
@@ -112,11 +116,7 @@ public final class CalculateStaminaUtils {
             ModNet.sendActionStaminaCost(player, cost);
         }
 
-        int delay = BetterParaglidersConfig.actionRecoveryDelay();
-        if (delay > 0) {
-            Movement movement = Movement.get(player);
-            movement.setRecoveryDelay(Math.max(movement.recoveryDelay(), delay));
-        }
+        holdStaminaRecovery(player);
         return true;
     }
 
@@ -161,6 +161,7 @@ public final class CalculateStaminaUtils {
 
     private static void holdStaminaRecovery(ServerPlayer player) {
         int delay = BetterParaglidersConfig.actionRecoveryDelay();
+        if (staminaEmpty(Stamina.get(player))) delay = DEPLETION_RECOVERY_DELAY_TICKS;
         if (delay <= 0) return;
         Movement movement = Movement.get(player);
         movement.setRecoveryDelay(Math.max(movement.recoveryDelay(), delay));
@@ -174,8 +175,9 @@ public final class CalculateStaminaUtils {
     public static double getModifiedStaminaDelta(PlayerMovement movement) {
         double original = movement.staminaDelta();
         Player player = movement.player();
+        String statePath = movement.state().id().getPath();
 
-        double modified = switch (movement.state().id().getPath()) {
+        double modified = switch (statePath) {
             case "idle" -> original + attribute(player, BetterParaglidersAttributes.IDLE_STAMINA_REGEN);
             case "running" -> original + attribute(player, BetterParaglidersAttributes.SPRINTING_STAMINA_REDUCTION);
             case "swimming" -> original + attribute(player, BetterParaglidersAttributes.SWIMMING_STAMINA_REDUCTION);
@@ -196,8 +198,47 @@ public final class CalculateStaminaUtils {
             default -> original;
         };
 
+        modified = applyMovementDiscount(player, statePath, original, modified);
+
         if (original >= 0) return Math.max(modified, original);
         return Math.min(0, modified);
+    }
+
+    private static double applyMovementDiscount(Player player, String statePath, double original, double modified) {
+        if (original >= 0) return modified;
+        if (!isDiscountableState(statePath)) return modified;
+        double discount = sprintDiscountFor(player);
+        if (discount <= 0.0D) return modified;
+        return modified * (1.0D - discount);
+    }
+
+    private static boolean isDiscountableState(String statePath) {
+        return "running".equals(statePath) || "fast_running".equals(statePath)
+                || "swimming".equals(statePath) || "fast_swimming".equals(statePath);
+    }
+
+    private static double applyDiscount(Player player, double cost) {
+        double discount = staminaDiscountFor(player);
+        if (discount <= 0.0D) return cost;
+        return cost * (1.0D - discount);
+    }
+
+    private static double staminaDiscountFor(Player player) {
+        MobEffectInstance instance = player.getEffect(PotionEffects.STAMINA_EFFICIENCY);
+        if (instance == null) return 0.0D;
+        double discount = BetterParaglidersConfig.staminaEfficiencyDiscount(instance.getAmplifier());
+        return Math.max(0.0D, Math.min(1.0D, discount));
+    }
+
+    private static double sprintDiscountFor(Player player) {
+        MobEffectInstance instance = player.getEffect(PotionEffects.SPRINT_EFFICIENCY);
+        if (instance == null) return 0.0D;
+        double discount = BetterParaglidersConfig.sprintEfficiencyDiscount(instance.getAmplifier());
+        return Math.max(0.0D, Math.min(1.0D, discount));
+    }
+
+    public static boolean staminaEmpty(Stamina stamina) {
+        return stamina.stamina() <= 0 && stamina.extraStamina() <= 0;
     }
 
     private static double attribute(Player player, Holder<Attribute> attribute) {

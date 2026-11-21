@@ -34,6 +34,9 @@ public abstract class PlayerMovementMixin {
 
         if (delta < 0) {
             if (!stamina.isDepleted()) stamina.takeStamina(-delta, false, false, true);
+            if (CalculateStaminaUtils.staminaEmpty(stamina)) {
+                newRecoveryDelay = Math.max(newRecoveryDelay, CalculateStaminaUtils.DEPLETION_RECOVERY_DELAY_TICKS);
+            }
         } else {
             if (recoveryDelay > 0) newRecoveryDelay--;
             else if (delta > 0) stamina.giveStamina(delta, false, true);
