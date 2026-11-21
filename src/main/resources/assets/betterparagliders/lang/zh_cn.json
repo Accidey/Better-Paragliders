@@ -43,5 +43,7 @@
   "item.minecraft.potion.effect.betterparagliders.strong_archery": "强效射手药剂",
   "item.minecraft.splash_potion.effect.betterparagliders.strong_archery": "强效射手药剂",
   "item.minecraft.lingering_potion.effect.betterparagliders.strong_archery": "强效射手药剂",
-  "item.minecraft.tipped_arrow.effect.betterparagliders.strong_archery": "强效射手药剂"
+  "item.minecraft.tipped_arrow.effect.betterparagliders.strong_archery": "强效射手药剂",
+  "effect.betterparagliders.archery_power": "弓弩伤害提升",
+  "effect.betterparagliders.archery_efficiency": "弓弩效率"
 }

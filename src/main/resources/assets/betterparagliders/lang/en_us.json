@@ -43,5 +43,7 @@
   "item.minecraft.potion.effect.betterparagliders.strong_archery": "Strong Archer's Potion",
   "item.minecraft.splash_potion.effect.betterparagliders.strong_archery": "Strong Archer's Potion",
   "item.minecraft.lingering_potion.effect.betterparagliders.strong_archery": "Strong Archer's Potion",
-  "item.minecraft.tipped_arrow.effect.betterparagliders.strong_archery": "Strong Archer's Potion"
+  "item.minecraft.tipped_arrow.effect.betterparagliders.strong_archery": "Strong Archer's Potion",
+  "effect.betterparagliders.archery_power": "Archery Power",
+  "effect.betterparagliders.archery_efficiency": "Archery Efficiency"
 }
