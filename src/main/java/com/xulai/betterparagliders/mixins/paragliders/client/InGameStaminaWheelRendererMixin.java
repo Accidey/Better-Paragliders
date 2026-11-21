@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import tictim.paraglider.api.movement.Movement;
 import tictim.paraglider.api.stamina.Stamina;
 import tictim.paraglider.client.render.InGameStaminaWheelRenderer;
+import tictim.paraglider.client.render.StaminaWheelConstants;
 
 @Mixin(InGameStaminaWheelRenderer.class)
 public abstract class InGameStaminaWheelRendererMixin {
@@ -26,5 +27,12 @@ public abstract class InGameStaminaWheelRendererMixin {
             if (cost > 0) return delta - cost;
         }
         return delta;
+    }
+
+    @Redirect(method = "makeWheel", at = @At(value = "INVOKE",
+            target = "Ltictim/paraglider/client/render/StaminaWheelConstants;getBlinkColor(JZ)I"), remap = false)
+    private int betterparagliders$greenRecoveryAfterDepletion(long ms, boolean depleted) {
+        if (depleted) return StaminaWheelConstants.wheelColor(0);
+        return StaminaWheelConstants.getBlinkColor(ms, false);
     }
 }
