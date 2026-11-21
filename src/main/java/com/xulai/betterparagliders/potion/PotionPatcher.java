@@ -29,6 +29,9 @@ public final class PotionPatcher {
         patchOrRestore(Potions.SWIFTNESS, () -> effects(MobEffects.MOVEMENT_SPEED, 0, PotionEffects.SPRINT_EFFICIENCY, 0, BetterParaglidersConfig.swiftnessDurationSeconds()));
         patchOrRestore(Potions.LONG_SWIFTNESS, () -> effects(MobEffects.MOVEMENT_SPEED, 0, PotionEffects.SPRINT_EFFICIENCY, 1, BetterParaglidersConfig.longSwiftnessDurationSeconds()));
         patchOrRestore(Potions.STRONG_SWIFTNESS, () -> effects(MobEffects.MOVEMENT_SPEED, 1, PotionEffects.SPRINT_EFFICIENCY, 2, BetterParaglidersConfig.strongSwiftnessDurationSeconds()));
+        patchOrEmpty(PotionEffects.ARCHERY, () -> effects(PotionEffects.ARCHERY_POWER, 0, PotionEffects.ARCHERY_EFFICIENCY, 0, BetterParaglidersConfig.archeryDurationSeconds()));
+        patchOrEmpty(PotionEffects.LONG_ARCHERY, () -> effects(PotionEffects.ARCHERY_POWER, 0, PotionEffects.ARCHERY_EFFICIENCY, 1, BetterParaglidersConfig.longArcheryDurationSeconds()));
+        patchOrEmpty(PotionEffects.STRONG_ARCHERY, () -> effects(PotionEffects.ARCHERY_POWER, 1, PotionEffects.ARCHERY_EFFICIENCY, 2, BetterParaglidersConfig.strongArcheryDurationSeconds()));
         patched = true;
     }
 
@@ -42,6 +45,14 @@ public final class PotionPatcher {
             if (original != null) {
                 ((PotionAccessor) (Object) potion.value()).betterparagliders$setEffects(original);
             }
+            return;
+        }
+        ((PotionAccessor) (Object) potion.value()).betterparagliders$setEffects(modifiedEffects.get());
+    }
+
+    private static void patchOrEmpty(Holder<Potion> potion, Supplier<List<MobEffectInstance>> modifiedEffects) {
+        if (!BetterParaglidersConfig.potionEffectsEnabled()) {
+            ((PotionAccessor) (Object) potion.value()).betterparagliders$setEffects(List.of());
             return;
         }
         ((PotionAccessor) (Object) potion.value()).betterparagliders$setEffects(modifiedEffects.get());

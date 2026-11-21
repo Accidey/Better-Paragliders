@@ -21,19 +21,27 @@
   "attribute.name.betterparagliders.two_handed_stamina_reduction": "Two Handed Stamina Reduction",
   "attribute.name.betterparagliders.range_stamina_reduction": "Ranged Stamina Reduction",
   "attribute.name.betterparagliders.block_stamina_reduction": "Block Stamina Reduction",
-
   "betterparagliders.category.melee": "melee",
   "betterparagliders.category.ranged": "ranged",
   "betterparagliders.category.shield": "shield",
-
   "command.betterparagliders.no_item": "You have to hold an item in your main hand.",
   "command.betterparagliders.added": "Set %s as a stamina cost entry of the %s list with a cost of %s.",
   "command.betterparagliders.removed": "Removed %s from every stamina cost list.",
   "command.betterparagliders.not_configured": "%s is not present in any stamina cost list.",
   "command.betterparagliders.unknown_category": "Unknown item category: %s",
-
   "message.betterparagliders.death_penalty": "You lost %s heart container(s) to death. Your maximum health has been reduced.",
-
   "effect.betterparagliders.stamina_efficiency": "Stamina Efficiency",
-  "effect.betterparagliders.sprint_efficiency": "Sprint Efficiency"
+  "effect.betterparagliders.sprint_efficiency": "Sprint Efficiency",
+  "item.minecraft.potion.effect.betterparagliders.archery": "Archer's Potion",
+  "item.minecraft.splash_potion.effect.betterparagliders.archery": "Archer's Potion",
+  "item.minecraft.lingering_potion.effect.betterparagliders.archery": "Archer's Potion",
+  "item.minecraft.tipped_arrow.effect.betterparagliders.archery": "Archer's Potion",
+  "item.minecraft.potion.effect.betterparagliders.long_archery": "Long Archer's Potion",
+  "item.minecraft.splash_potion.effect.betterparagliders.long_archery": "Long Archer's Potion",
+  "item.minecraft.lingering_potion.effect.betterparagliders.long_archery": "Long Archer's Potion",
+  "item.minecraft.tipped_arrow.effect.betterparagliders.long_archery": "Long Archer's Potion",
+  "item.minecraft.potion.effect.betterparagliders.strong_archery": "Strong Archer's Potion",
+  "item.minecraft.splash_potion.effect.betterparagliders.strong_archery": "Strong Archer's Potion",
+  "item.minecraft.lingering_potion.effect.betterparagliders.strong_archery": "Strong Archer's Potion",
+  "item.minecraft.tipped_arrow.effect.betterparagliders.strong_archery": "Strong Archer's Potion"
 }

@@ -29,6 +29,7 @@ public class BetterParaglidersMod {
     public BetterParaglidersMod(IEventBus modEventBus, ModContainer modContainer) {
         BetterParaglidersAttributes.register(modEventBus);
         PotionEffects.EFFECTS.register(modEventBus);
+        PotionEffects.POTIONS.register(modEventBus);
         ModNet.register(modEventBus);
 
         modEventBus.addListener(BetterParaglidersConfig::onConfigEvent);
@@ -57,7 +58,7 @@ public class BetterParaglidersMod {
             public boolean isVisibleInGui(MobEffectInstance instance) {
                 return false;
             }
-        }, PotionEffects.STAMINA_EFFICIENCY, PotionEffects.SPRINT_EFFICIENCY);
+        }, PotionEffects.STAMINA_EFFICIENCY, PotionEffects.SPRINT_EFFICIENCY, PotionEffects.ARCHERY_EFFICIENCY);
     }
 
     private static void onEntityAttributeModification(EntityAttributeModificationEvent event) {

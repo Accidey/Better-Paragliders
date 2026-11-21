@@ -47,6 +47,14 @@ public final class BetterParaglidersConfig {
     public static final ModConfigSpec.IntValue SWIFTNESS_DURATION_SECONDS;
     public static final ModConfigSpec.IntValue LONG_SWIFTNESS_DURATION_SECONDS;
     public static final ModConfigSpec.IntValue STRONG_SWIFTNESS_DURATION_SECONDS;
+    public static final ModConfigSpec.DoubleValue ARCHERY_STAMINA_DISCOUNT;
+    public static final ModConfigSpec.DoubleValue LONG_ARCHERY_STAMINA_DISCOUNT;
+    public static final ModConfigSpec.DoubleValue STRONG_ARCHERY_STAMINA_DISCOUNT;
+    public static final ModConfigSpec.DoubleValue ARCHERY_DAMAGE_BONUS;
+    public static final ModConfigSpec.DoubleValue STRONG_ARCHERY_DAMAGE_BONUS;
+    public static final ModConfigSpec.IntValue ARCHERY_DURATION_SECONDS;
+    public static final ModConfigSpec.IntValue LONG_ARCHERY_DURATION_SECONDS;
+    public static final ModConfigSpec.IntValue STRONG_ARCHERY_DURATION_SECONDS;
     public static final ModConfigSpec.DoubleValue STAMINA_REGEN_EXHAUSTION_PER_WHEEL;
 
     static {
@@ -435,6 +443,96 @@ public final class BetterParaglidersConfig {
                         "Range: 1 ~ 7200")
                 .defineInRange("strongSwiftnessDurationSeconds", 900, 1, 7200);
 
+        BUILDER.comment(" ");
+
+        ARCHERY_STAMINA_DISCOUNT = BUILDER
+                .comment("射手药剂附带的弓弩耐力消耗降低比例",
+                        "Bow and crossbow stamina discount granted by the archery efficiency effect of archery potions",
+                        "射手药剂给的是弓弩效率等级 0，对应这个数值；按原版数值设定即每次射击的耐力消耗降为 20%。",
+                        "Archery potions grant archery efficiency level 0, which maps to this value; the vanilla value makes each shot cost 20% of its stamina.",
+                        "Default: 0.20 / 默认：0.20",
+                        "Range: 0.0 ~ 1.0")
+                .defineInRange("archeryStaminaDiscount", 0.20, 0.0, 1.0);
+
+        BUILDER.comment(" ");
+
+        LONG_ARCHERY_STAMINA_DISCOUNT = BUILDER
+                .comment("长效射手药剂附带的弓弩耐力消耗降低比例",
+                        "Bow and crossbow stamina discount granted by the archery efficiency effect of long archery potions",
+                        "长效射手药剂给的是弓弩效率等级 1，对应这个数值。",
+                        "Long archery potions grant archery efficiency level 1, which maps to this value.",
+                        "Default: 0.50 / 默认：0.50",
+                        "Range: 0.0 ~ 1.0")
+                .defineInRange("longArcheryStaminaDiscount", 0.50, 0.0, 1.0);
+
+        BUILDER.comment(" ");
+
+        STRONG_ARCHERY_STAMINA_DISCOUNT = BUILDER
+                .comment("强效射手药剂附带的弓弩耐力消耗降低比例",
+                        "Bow and crossbow stamina discount granted by the archery efficiency effect of strong archery potions",
+                        "强效射手药剂给的是弓弩效率等级 2，等级 2 及以上都对应这个数值；1.0 表示射击完全不消耗耐力。",
+                        "Strong archery potions grant archery efficiency level 2; level 2 and above map to this value. 1.0 means shots cost no stamina at all.",
+                        "Default: 1.00 / 默认：1.00",
+                        "Range: 0.0 ~ 1.0")
+                .defineInRange("strongArcheryStaminaDiscount", 1.00, 0.0, 1.0);
+
+        BUILDER.comment(" ");
+
+        ARCHERY_DAMAGE_BONUS = BUILDER
+                .comment("射手药水的箭矢伤害加成（一、二档）",
+                        "Arrow damage bonus of the archery power effect (regular and long tiers)",
+                        "按倍率计算：实际伤害 = 箭速 × 箭矢基础伤害 × (1 + 加成)。箭矢基础伤害 2.0，满蓄力箭速约 3.0，默认 0.25 使满蓄力箭伤约提升 25%。",
+                        "Applied as a multiplier: final damage = arrow speed x base damage x (1 + bonus). Base damage is 2.0 and a fully drawn arrow flies at roughly 3.0 speed, so the default 0.25 boosts full-draw damage by about 25%.",
+                        "只作用于弓与弩射出的箭，三叉戟不受影响。",
+                        "Applies to arrows shot by bows and crossbows; tridents are unaffected.",
+                        "Default: 0.25 / 默认：0.25",
+                        "Range: 0.0 ~ 2.0")
+                .defineInRange("archeryDamageBonus", 0.25, 0.0, 2.0);
+
+        BUILDER.comment(" ");
+
+        STRONG_ARCHERY_DAMAGE_BONUS = BUILDER
+                .comment("强效射手药水的箭矢伤害加成（三档）",
+                        "Arrow damage bonus of the archery power effect (strong tier)",
+                        "强效射手药剂给的是弓弩伤害提升等级 1，等级 1 及以上都对应这个数值。",
+                        "Strong archery potions grant archery power level 1; level 1 and above map to this value.",
+                        "Default: 0.50 / 默认：0.50",
+                        "Range: 0.0 ~ 2.0")
+                .defineInRange("strongArcheryDamageBonus", 0.50, 0.0, 2.0);
+
+        BUILDER.comment(" ");
+
+        ARCHERY_DURATION_SECONDS = BUILDER
+                .comment("射手药剂效果时长（秒）",
+                        "Archery potion effect duration in seconds",
+                        "对应 KCD2 的 10 分钟。修改后立即作用于所有已有药水，无需重新酿造。",
+                        "Matches the 10 minutes of KCD2. Applies to already brewed potions immediately.",
+                        "Default: 600 / 默认：600",
+                        "Range: 1 ~ 7200")
+                .defineInRange("archeryDurationSeconds", 600, 1, 7200);
+
+        BUILDER.comment(" ");
+
+        LONG_ARCHERY_DURATION_SECONDS = BUILDER
+                .comment("长效射手药剂效果时长（秒）",
+                        "Long archery potion effect duration in seconds",
+                        "对应 KCD2 的 10 分钟。修改后立即作用于所有已有药水，无需重新酿造。",
+                        "Matches the 10 minutes of KCD2. Applies to already brewed potions immediately.",
+                        "Default: 600 / 默认：600",
+                        "Range: 1 ~ 7200")
+                .defineInRange("longArcheryDurationSeconds", 600, 1, 7200);
+
+        BUILDER.comment(" ");
+
+        STRONG_ARCHERY_DURATION_SECONDS = BUILDER
+                .comment("强效射手药剂效果时长（秒）",
+                        "Strong archery potion effect duration in seconds",
+                        "对应 KCD2 亨利的 15 分钟。修改后立即作用于所有已有药水，无需重新酿造。",
+                        "Matches the 15 minutes of KCD2's Henry tier. Applies to already brewed potions immediately.",
+                        "Default: 900 / 默认：900",
+                        "Range: 1 ~ 7200")
+                .defineInRange("strongArcheryDurationSeconds", 900, 1, 7200);
+
         BUILDER.pop();
 
         BUILDER.comment(" ");
@@ -484,6 +582,14 @@ public final class BetterParaglidersConfig {
     private static volatile int swiftnessDurationSeconds = 180;
     private static volatile int longSwiftnessDurationSeconds = 480;
     private static volatile int strongSwiftnessDurationSeconds = 900;
+    private static volatile double archeryStaminaDiscount = 0.20;
+    private static volatile double longArcheryStaminaDiscount = 0.50;
+    private static volatile double strongArcheryStaminaDiscount = 1.00;
+    private static volatile double archeryDamageBonus = 0.25;
+    private static volatile double strongArcheryDamageBonus = 0.50;
+    private static volatile int archeryDurationSeconds = 600;
+    private static volatile int longArcheryDurationSeconds = 600;
+    private static volatile int strongArcheryDurationSeconds = 900;
     private static volatile boolean potionEffectsEnabled = true;
     private static volatile double staminaRegenExhaustionPerWheel = 8.0;
 
@@ -549,6 +655,14 @@ public final class BetterParaglidersConfig {
         swiftnessDurationSeconds = value(SWIFTNESS_DURATION_SECONDS);
         longSwiftnessDurationSeconds = value(LONG_SWIFTNESS_DURATION_SECONDS);
         strongSwiftnessDurationSeconds = value(STRONG_SWIFTNESS_DURATION_SECONDS);
+        archeryStaminaDiscount = value(ARCHERY_STAMINA_DISCOUNT);
+        longArcheryStaminaDiscount = value(LONG_ARCHERY_STAMINA_DISCOUNT);
+        strongArcheryStaminaDiscount = value(STRONG_ARCHERY_STAMINA_DISCOUNT);
+        archeryDamageBonus = value(ARCHERY_DAMAGE_BONUS);
+        strongArcheryDamageBonus = value(STRONG_ARCHERY_DAMAGE_BONUS);
+        archeryDurationSeconds = value(ARCHERY_DURATION_SECONDS);
+        longArcheryDurationSeconds = value(LONG_ARCHERY_DURATION_SECONDS);
+        strongArcheryDurationSeconds = value(STRONG_ARCHERY_DURATION_SECONDS);
         potionEffectsEnabled = value(ENABLE_POTION_EFFECTS);
         staminaRegenExhaustionPerWheel = value(STAMINA_REGEN_EXHAUSTION_PER_WHEEL);
 
@@ -719,6 +833,29 @@ public final class BetterParaglidersConfig {
 
     public static int strongSwiftnessDurationSeconds() {
         return strongSwiftnessDurationSeconds;
+    }
+
+    public static double archeryStaminaDiscount(int amplifier) {
+        if (amplifier <= 0) return archeryStaminaDiscount;
+        if (amplifier == 1) return longArcheryStaminaDiscount;
+        return strongArcheryStaminaDiscount;
+    }
+
+    public static double archeryDamageBonus(int amplifier) {
+        if (amplifier <= 0) return archeryDamageBonus;
+        return strongArcheryDamageBonus;
+    }
+
+    public static int archeryDurationSeconds() {
+        return archeryDurationSeconds;
+    }
+
+    public static int longArcheryDurationSeconds() {
+        return longArcheryDurationSeconds;
+    }
+
+    public static int strongArcheryDurationSeconds() {
+        return strongArcheryDurationSeconds;
     }
 
     public static boolean potionEffectsEnabled() {

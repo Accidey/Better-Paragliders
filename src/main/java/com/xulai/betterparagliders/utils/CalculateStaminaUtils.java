@@ -94,7 +94,16 @@ public final class CalculateStaminaUtils {
     public static int calculateRangedStaminaCost(Player player, ItemStack stack) {
         double cost = BetterParaglidersConfig.costOf(ItemCategory.RANGED, stack.getItem());
         cost -= player.getAttributeValue(BetterParaglidersAttributes.RANGE_STAMINA_REDUCTION);
+        double discount = archeryDiscountFor(player);
+        if (discount > 0.0D) cost *= (1.0D - discount);
         return toCost(cost);
+    }
+
+    private static double archeryDiscountFor(Player player) {
+        MobEffectInstance instance = player.getEffect(PotionEffects.ARCHERY_EFFICIENCY);
+        if (instance == null) return 0.0D;
+        double discount = BetterParaglidersConfig.archeryStaminaDiscount(instance.getAmplifier());
+        return Math.max(0.0D, Math.min(1.0D, discount));
     }
 
     public static int calculateBlockStaminaCost(Player player, ItemStack stack) {

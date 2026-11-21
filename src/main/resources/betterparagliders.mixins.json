@@ -12,7 +12,8 @@
     "minecraft.PlayerAiStepMixin",
     "minecraft.ServerPlayerGameModeMixin",
     "minecraft.PotionAccessor",
-    "minecraft.PotionBrewingBuilderMixin"
+    "minecraft.PotionBrewingBuilderMixin",
+    "minecraft.AbstractArrowMixin"
   ],
   "client": [
     "paragliders.client.ClientPlayerMovementMixin",

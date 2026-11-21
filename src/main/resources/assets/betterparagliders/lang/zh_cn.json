@@ -21,19 +21,27 @@
   "attribute.name.betterparagliders.two_handed_stamina_reduction": "双手武器耐力消耗",
   "attribute.name.betterparagliders.range_stamina_reduction": "远程武器耐力消耗",
   "attribute.name.betterparagliders.block_stamina_reduction": "格挡耐力消耗",
-
   "betterparagliders.category.melee": "近战",
   "betterparagliders.category.ranged": "远程",
   "betterparagliders.category.shield": "盾牌",
-
   "command.betterparagliders.no_item": "你需要主手持有一件物品。",
   "command.betterparagliders.added": "已把 %s 写入%s物品的耐力消耗表，数值为 %s。",
   "command.betterparagliders.removed": "已把 %s 从所有耐力消耗表中移除。",
   "command.betterparagliders.not_configured": "%s 不在任何耐力消耗表中。",
   "command.betterparagliders.unknown_category": "未知的物品类别：%s",
-
   "message.betterparagliders.death_penalty": "你因死亡失去了 %s 个心之容器，最大生命值已降低。",
-
   "effect.betterparagliders.stamina_efficiency": "耐力效率",
-  "effect.betterparagliders.sprint_efficiency": "冲刺效率"
+  "effect.betterparagliders.sprint_efficiency": "冲刺效率",
+  "item.minecraft.potion.effect.betterparagliders.archery": "射手药剂",
+  "item.minecraft.splash_potion.effect.betterparagliders.archery": "射手药剂",
+  "item.minecraft.lingering_potion.effect.betterparagliders.archery": "射手药剂",
+  "item.minecraft.tipped_arrow.effect.betterparagliders.archery": "射手药剂",
+  "item.minecraft.potion.effect.betterparagliders.long_archery": "长效射手药剂",
+  "item.minecraft.splash_potion.effect.betterparagliders.long_archery": "长效射手药剂",
+  "item.minecraft.lingering_potion.effect.betterparagliders.long_archery": "长效射手药剂",
+  "item.minecraft.tipped_arrow.effect.betterparagliders.long_archery": "长效射手药剂",
+  "item.minecraft.potion.effect.betterparagliders.strong_archery": "强效射手药剂",
+  "item.minecraft.splash_potion.effect.betterparagliders.strong_archery": "强效射手药剂",
+  "item.minecraft.lingering_potion.effect.betterparagliders.strong_archery": "强效射手药剂",
+  "item.minecraft.tipped_arrow.effect.betterparagliders.strong_archery": "强效射手药剂"
 }
