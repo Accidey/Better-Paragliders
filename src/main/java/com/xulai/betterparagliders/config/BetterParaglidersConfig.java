@@ -505,8 +505,8 @@ public final class BetterParaglidersConfig {
         ARCHERY_DURATION_SECONDS = BUILDER
                 .comment("射手药剂效果时长（秒）",
                         "Archery potion effect duration in seconds",
-                        "对应 KCD2 的 10 分钟。修改后立即作用于所有已有药水，无需重新酿造。",
-                        "Matches the 10 minutes of KCD2. Applies to already brewed potions immediately.",
+                        "同时决定弓弩伤害提升与弓弩效率效果的持续时长。修改后立即作用于所有已有药水，无需重新酿造。",
+                        "Applies to both the archery power and archery efficiency effects. Applies to already brewed potions immediately.",
                         "Default: 600 / 默认：600",
                         "Range: 1 ~ 7200")
                 .defineInRange("archeryDurationSeconds", 600, 1, 7200);
@@ -516,8 +516,8 @@ public final class BetterParaglidersConfig {
         LONG_ARCHERY_DURATION_SECONDS = BUILDER
                 .comment("长效射手药剂效果时长（秒）",
                         "Long archery potion effect duration in seconds",
-                        "对应 KCD2 的 10 分钟。修改后立即作用于所有已有药水，无需重新酿造。",
-                        "Matches the 10 minutes of KCD2. Applies to already brewed potions immediately.",
+                        "同时决定弓弩伤害提升与弓弩效率效果的持续时长。修改后立即作用于所有已有药水，无需重新酿造。",
+                        "Applies to both the archery power and archery efficiency effects. Applies to already brewed potions immediately.",
                         "Default: 600 / 默认：600",
                         "Range: 1 ~ 7200")
                 .defineInRange("longArcheryDurationSeconds", 600, 1, 7200);
@@ -527,8 +527,8 @@ public final class BetterParaglidersConfig {
         STRONG_ARCHERY_DURATION_SECONDS = BUILDER
                 .comment("强效射手药剂效果时长（秒）",
                         "Strong archery potion effect duration in seconds",
-                        "对应 KCD2 亨利的 15 分钟。修改后立即作用于所有已有药水，无需重新酿造。",
-                        "Matches the 15 minutes of KCD2's Henry tier. Applies to already brewed potions immediately.",
+                        "同时决定弓弩伤害提升与弓弩效率效果的持续时长。修改后立即作用于所有已有药水，无需重新酿造。",
+                        "Applies to both the archery power and archery efficiency effects. Applies to already brewed potions immediately.",
                         "Default: 900 / 默认：900",
                         "Range: 1 ~ 7200")
                 .defineInRange("strongArcheryDurationSeconds", 900, 1, 7200);
