@@ -241,6 +241,15 @@ public final class CalculateStaminaUtils {
         return stamina.stamina() <= 0 && stamina.extraStamina() <= 0;
     }
 
+    public static void chargeRecoveryExhaustion(Player player, double staminaRecovered) {
+        if (staminaRecovered <= 0) return;
+        if (player.isCreative() || player.isSpectator()) return;
+        double exhaustionPerWheel = BetterParaglidersConfig.staminaRegenExhaustionPerWheel();
+        if (exhaustionPerWheel <= 0) return;
+        player.getFoodData().addExhaustion(
+                (float)(staminaRecovered / Stamina.STAMINA_PER_WHEEL * exhaustionPerWheel));
+    }
+
     private static double attribute(Player player, Holder<Attribute> attribute) {
         return player.getAttributeValue(attribute);
     }

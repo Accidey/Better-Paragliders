@@ -46,6 +46,7 @@ public final class BetterParaglidersConfig {
     public static final ModConfigSpec.IntValue SWIFTNESS_DURATION_SECONDS;
     public static final ModConfigSpec.IntValue LONG_SWIFTNESS_DURATION_SECONDS;
     public static final ModConfigSpec.IntValue STRONG_SWIFTNESS_DURATION_SECONDS;
+    public static final ModConfigSpec.DoubleValue STAMINA_REGEN_EXHAUSTION_PER_WHEEL;
 
     static {
         MELEE_STAMINA_COST = BUILDER
@@ -420,6 +421,21 @@ public final class BetterParaglidersConfig {
                         "Default: 900 / 默认：900",
                         "Range: 1 ~ 7200")
                 .defineInRange("strongSwiftnessDurationSeconds", 900, 1, 7200);
+
+        BUILDER.comment(" ");
+
+        STAMINA_REGEN_EXHAUSTION_PER_WHEEL = BUILDER
+                .comment("每恢复一整轮耐力增加的疲惫值",
+                        "Exhaustion added per full stamina wheel recovered",
+                        "耐力每恢复 1000 点（一整轮）就给玩家增加这个数值的疲惫值，疲惫值按原版规则折算成饱和度与饥饿值消耗：4 点疲惫 = 1 点饥饿（半格图标）。",
+                        "Every 1000 stamina recovered (one full wheel) adds this much exhaustion to the player. Vanilla rules convert exhaustion into saturation and hunger loss: 4 exhaustion = 1 food point (half an icon).",
+                        "默认 8 表示每回满一轮掉一整格饥饿图标；从空轮到三整轮全满约消耗 1.5 格。恢复实际发生时才计费，满轮溢出的部分不计。",
+                        "The default 8 drains one full hunger icon per wheel; refilling from empty to three full wheels costs about 1.5 icons. Only actual recovery is charged; overflow beyond the wheel is free.",
+                        "0 = 关闭该机制。创造与旁观模式不受影响。",
+                        "0 disables the mechanic. Creative and spectator modes are unaffected.",
+                        "Default: 8.0 / 默认：8.0",
+                        "Range: 0.0 ~ 80.0")
+                .defineInRange("staminaRegenExhaustionPerWheel", 8.0, 0.0, 80.0);
     }
 
     public static final ModConfigSpec SPEC = BUILDER.build();
@@ -453,6 +469,7 @@ public final class BetterParaglidersConfig {
     private static volatile int swiftnessDurationSeconds = 180;
     private static volatile int longSwiftnessDurationSeconds = 480;
     private static volatile int strongSwiftnessDurationSeconds = 900;
+    private static volatile double staminaRegenExhaustionPerWheel = 8.0;
 
     private BetterParaglidersConfig() {}
 
@@ -516,6 +533,7 @@ public final class BetterParaglidersConfig {
         swiftnessDurationSeconds = value(SWIFTNESS_DURATION_SECONDS);
         longSwiftnessDurationSeconds = value(LONG_SWIFTNESS_DURATION_SECONDS);
         strongSwiftnessDurationSeconds = value(STRONG_SWIFTNESS_DURATION_SECONDS);
+        staminaRegenExhaustionPerWheel = value(STAMINA_REGEN_EXHAUSTION_PER_WHEEL);
 
         meleeOverrides = parseOverrides(value(MELEE_ITEM_OVERRIDES), "melee_item_overrides");
         rangedOverrides = parseOverrides(value(RANGED_ITEM_OVERRIDES), "ranged_item_overrides");
@@ -684,5 +702,9 @@ public final class BetterParaglidersConfig {
 
     public static int strongSwiftnessDurationSeconds() {
         return strongSwiftnessDurationSeconds;
+    }
+
+    public static double staminaRegenExhaustionPerWheel() {
+        return staminaRegenExhaustionPerWheel;
     }
 }

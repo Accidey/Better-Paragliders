@@ -20,9 +20,10 @@ public abstract class PlayerMovementMixin {
     @Inject(method = "updateStamina", at = @At("HEAD"), cancellable = true, remap = false)
     private void betterparagliders$updateStamina(CallbackInfo ci) {
         PlayerMovement self = (PlayerMovement) (Object) this;
+        boolean remote = this.isRemote();
         Stamina stamina = self.stamina();
 
-        if (!stamina.updateWithDefaultLogic(this.isRemote())) {
+        if (!stamina.updateWithDefaultLogic(remote)) {
             ci.cancel();
             return;
         }
@@ -39,7 +40,10 @@ public abstract class PlayerMovementMixin {
             }
         } else {
             if (recoveryDelay > 0) newRecoveryDelay--;
-            else if (delta > 0) stamina.giveStamina(delta, false, true);
+            else if (delta > 0) {
+                double given = stamina.giveStamina(delta, false, true);
+                if (!remote) CalculateStaminaUtils.chargeRecoveryExhaustion(self.player(), given);
+            }
         }
 
         if (stamina instanceof StaminaOverride override) {
