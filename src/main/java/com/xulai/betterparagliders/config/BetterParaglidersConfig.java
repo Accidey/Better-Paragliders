@@ -448,33 +448,33 @@ public final class BetterParaglidersConfig {
         ARCHERY_STAMINA_DISCOUNT = BUILDER
                 .comment("射手药剂附带的弓弩耐力消耗降低比例",
                         "Bow and crossbow stamina discount granted by the archery efficiency effect of archery potions",
-                        "射手药剂给的是弓弩效率等级 0，对应这个数值；按原版数值设定即每次射击的耐力消耗降为 20%。",
-                        "Archery potions grant archery efficiency level 0, which maps to this value; the vanilla value makes each shot cost 20% of its stamina.",
-                        "Default: 0.20 / 默认：0.20",
+                        "射手药剂给的是弓弩效率等级 0，对应这个数值；默认 0.10 即每次射击的耐力消耗降为 10%。",
+                        "Archery potions grant archery efficiency level 0, which maps to this value; the default 0.10 makes each shot cost 10% of its stamina.",
+                        "Default: 0.10 / 默认：0.10",
                         "Range: 0.0 ~ 1.0")
-                .defineInRange("archeryStaminaDiscount", 0.20, 0.0, 1.0);
+                .defineInRange("archeryStaminaDiscount", 0.10, 0.0, 1.0);
 
         BUILDER.comment(" ");
 
         LONG_ARCHERY_STAMINA_DISCOUNT = BUILDER
                 .comment("长效射手药剂附带的弓弩耐力消耗降低比例",
                         "Bow and crossbow stamina discount granted by the archery efficiency effect of long archery potions",
-                        "长效射手药剂给的是弓弩效率等级 1，对应这个数值。",
-                        "Long archery potions grant archery efficiency level 1, which maps to this value.",
-                        "Default: 0.50 / 默认：0.50",
+                        "长效射手药剂给的是弓弩效率等级 1，对应这个数值；默认 0.20 即每次射击的耐力消耗降为 20%。",
+                        "Long archery potions grant archery efficiency level 1, which maps to this value; the default 0.20 makes each shot cost 20% of its stamina.",
+                        "Default: 0.20 / 默认：0.20",
                         "Range: 0.0 ~ 1.0")
-                .defineInRange("longArcheryStaminaDiscount", 0.50, 0.0, 1.0);
+                .defineInRange("longArcheryStaminaDiscount", 0.20, 0.0, 1.0);
 
         BUILDER.comment(" ");
 
         STRONG_ARCHERY_STAMINA_DISCOUNT = BUILDER
                 .comment("强效射手药剂附带的弓弩耐力消耗降低比例",
                         "Bow and crossbow stamina discount granted by the archery efficiency effect of strong archery potions",
-                        "强效射手药剂给的是弓弩效率等级 2，等级 2 及以上都对应这个数值；1.0 表示射击完全不消耗耐力。",
-                        "Strong archery potions grant archery efficiency level 2; level 2 and above map to this value. 1.0 means shots cost no stamina at all.",
-                        "Default: 1.00 / 默认：1.00",
+                        "强效射手药剂给的是弓弩效率等级 2，等级 2 及以上都对应这个数值；默认 0.30 即每次射击的耐力消耗降为 30%。",
+                        "Strong archery potions grant archery efficiency level 2; level 2 and above map to this value; the default 0.30 makes each shot cost 30% of its stamina.",
+                        "Default: 0.30 / 默认：0.30",
                         "Range: 0.0 ~ 1.0")
-                .defineInRange("strongArcheryStaminaDiscount", 1.00, 0.0, 1.0);
+                .defineInRange("strongArcheryStaminaDiscount", 0.30, 0.0, 1.0);
 
         BUILDER.comment(" ");
 
@@ -582,9 +582,9 @@ public final class BetterParaglidersConfig {
     private static volatile int swiftnessDurationSeconds = 180;
     private static volatile int longSwiftnessDurationSeconds = 480;
     private static volatile int strongSwiftnessDurationSeconds = 900;
-    private static volatile double archeryStaminaDiscount = 0.20;
-    private static volatile double longArcheryStaminaDiscount = 0.50;
-    private static volatile double strongArcheryStaminaDiscount = 1.00;
+    private static volatile double archeryStaminaDiscount = 0.10;
+    private static volatile double longArcheryStaminaDiscount = 0.20;
+    private static volatile double strongArcheryStaminaDiscount = 0.30;
     private static volatile double archeryDamageBonus = 0.25;
     private static volatile double strongArcheryDamageBonus = 0.50;
     private static volatile int archeryDurationSeconds = 600;
