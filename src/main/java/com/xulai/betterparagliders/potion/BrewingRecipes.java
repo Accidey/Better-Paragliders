@@ -5,12 +5,15 @@ import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 
+import com.xulai.betterparagliders.config.BetterParaglidersConfig;
+
 public final class BrewingRecipes {
 
     private BrewingRecipes() {
     }
 
     public static void onRegisterBrewingRecipes(RegisterBrewingRecipesEvent event) {
+        if (!BetterParaglidersConfig.potionEffectsEnabled()) return;
         PotionBrewing.Builder builder = event.getBuilder();
         builder.addMix(Potions.AWKWARD, Items.DANDELION, Potions.STRENGTH);
         builder.addMix(Potions.STRENGTH, Items.DANDELION, Potions.LONG_STRENGTH);

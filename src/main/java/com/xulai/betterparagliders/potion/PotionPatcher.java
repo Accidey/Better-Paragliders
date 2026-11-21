@@ -1,6 +1,9 @@
 package com.xulai.betterparagliders.potion;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 import com.xulai.betterparagliders.config.BetterParaglidersConfig;
 import com.xulai.betterparagliders.mixins.minecraft.PotionAccessor;
@@ -13,18 +16,19 @@ import net.minecraft.world.item.alchemy.Potions;
 
 public final class PotionPatcher {
 
+    private static final Map<Holder<Potion>, List<MobEffectInstance>> ORIGINALS = new HashMap<>();
     private static boolean patched;
 
     private PotionPatcher() {
     }
 
     public static void apply() {
-        patch(Potions.STRENGTH, MobEffects.DAMAGE_BOOST, 0, PotionEffects.STAMINA_EFFICIENCY, 0, BetterParaglidersConfig.strengthDurationSeconds());
-        patch(Potions.LONG_STRENGTH, MobEffects.DAMAGE_BOOST, 0, PotionEffects.STAMINA_EFFICIENCY, 1, BetterParaglidersConfig.longStrengthDurationSeconds());
-        patch(Potions.STRONG_STRENGTH, MobEffects.DAMAGE_BOOST, 1, PotionEffects.STAMINA_EFFICIENCY, 2, BetterParaglidersConfig.strongStrengthDurationSeconds());
-        patch(Potions.SWIFTNESS, MobEffects.MOVEMENT_SPEED, 0, PotionEffects.SPRINT_EFFICIENCY, 0, BetterParaglidersConfig.swiftnessDurationSeconds());
-        patch(Potions.LONG_SWIFTNESS, MobEffects.MOVEMENT_SPEED, 0, PotionEffects.SPRINT_EFFICIENCY, 1, BetterParaglidersConfig.longSwiftnessDurationSeconds());
-        patch(Potions.STRONG_SWIFTNESS, MobEffects.MOVEMENT_SPEED, 1, PotionEffects.SPRINT_EFFICIENCY, 2, BetterParaglidersConfig.strongSwiftnessDurationSeconds());
+        patchOrRestore(Potions.STRENGTH, () -> effects(MobEffects.DAMAGE_BOOST, 0, PotionEffects.STAMINA_EFFICIENCY, 0, BetterParaglidersConfig.strengthDurationSeconds()));
+        patchOrRestore(Potions.LONG_STRENGTH, () -> effects(MobEffects.DAMAGE_BOOST, 0, PotionEffects.STAMINA_EFFICIENCY, 1, BetterParaglidersConfig.longStrengthDurationSeconds()));
+        patchOrRestore(Potions.STRONG_STRENGTH, () -> effects(MobEffects.DAMAGE_BOOST, 1, PotionEffects.STAMINA_EFFICIENCY, 2, BetterParaglidersConfig.strongStrengthDurationSeconds()));
+        patchOrRestore(Potions.SWIFTNESS, () -> effects(MobEffects.MOVEMENT_SPEED, 0, PotionEffects.SPRINT_EFFICIENCY, 0, BetterParaglidersConfig.swiftnessDurationSeconds()));
+        patchOrRestore(Potions.LONG_SWIFTNESS, () -> effects(MobEffects.MOVEMENT_SPEED, 0, PotionEffects.SPRINT_EFFICIENCY, 1, BetterParaglidersConfig.longSwiftnessDurationSeconds()));
+        patchOrRestore(Potions.STRONG_SWIFTNESS, () -> effects(MobEffects.MOVEMENT_SPEED, 1, PotionEffects.SPRINT_EFFICIENCY, 2, BetterParaglidersConfig.strongSwiftnessDurationSeconds()));
         patched = true;
     }
 
@@ -32,12 +36,22 @@ public final class PotionPatcher {
         return patched;
     }
 
-    private static void patch(Holder<Potion> potion, Holder<MobEffect> visibleEffect, int visibleAmplifier,
+    private static void patchOrRestore(Holder<Potion> potion, Supplier<List<MobEffectInstance>> modifiedEffects) {
+        List<MobEffectInstance> original = ORIGINALS.putIfAbsent(potion, List.copyOf(potion.value().getEffects()));
+        if (!BetterParaglidersConfig.potionEffectsEnabled()) {
+            if (original != null) {
+                ((PotionAccessor) (Object) potion.value()).betterparagliders$setEffects(original);
+            }
+            return;
+        }
+        ((PotionAccessor) (Object) potion.value()).betterparagliders$setEffects(modifiedEffects.get());
+    }
+
+    private static List<MobEffectInstance> effects(Holder<MobEffect> visibleEffect, int visibleAmplifier,
             Holder<MobEffect> hiddenEffect, int hiddenAmplifier, int seconds) {
         int duration = Math.max(1, seconds * 20);
-        ((PotionAccessor) (Object) potion.value()).betterparagliders$setEffects(List.of(
+        return List.of(
                 new MobEffectInstance(visibleEffect, duration, visibleAmplifier, false, true, true),
-                new MobEffectInstance(hiddenEffect, duration, hiddenAmplifier, false, false, false)
-        ));
+                new MobEffectInstance(hiddenEffect, duration, hiddenAmplifier, false, false, false));
     }
 }

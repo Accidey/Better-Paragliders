@@ -34,6 +34,7 @@ public final class BetterParaglidersConfig {
     public static final ModConfigSpec.BooleanValue BLOCK_MINING_WITHOUT_STAMINA;
     public static final ModConfigSpec.IntValue DEATH_HEART_CONTAINER_LOSS;
     public static final ModConfigSpec.BooleanValue SEND_DEATH_PENALTY_MESSAGE;
+    public static final ModConfigSpec.BooleanValue ENABLE_POTION_EFFECTS;
     public static final ModConfigSpec.DoubleValue STRENGTH_STAMINA_DISCOUNT;
     public static final ModConfigSpec.DoubleValue LONG_STRENGTH_STAMINA_DISCOUNT;
     public static final ModConfigSpec.DoubleValue STRONG_STRENGTH_STAMINA_DISCOUNT;
@@ -288,6 +289,18 @@ public final class BetterParaglidersConfig {
 
         BUILDER.comment(" ");
 
+        BUILDER.comment("药水效果替换与酿造配方", "Potion effect replacement and brewing recipes").push("potionEffects");
+
+        ENABLE_POTION_EFFECTS = BUILDER
+                .comment("药水效果与酿造配方改动的总开关",
+                        "Master switch for potion effect and brewing recipe changes",
+                        "关闭后三档力量/迅捷药水恢复原版效果与时长，酿造配方恢复原版（烈焰粉与糖链）。重新开启后药水效果立即重新补丁，酿造配方需重进世界生效。",
+                        "When off, the strength/swiftness potions return to vanilla effects and durations, and brewing returns to the vanilla chains (blaze powder / sugar). Turning it on re-patches the potions instantly; brewing recipes apply after re-entering the world.",
+                        "Default: true / 默认：true")
+                .define("enabled", true);
+
+        BUILDER.comment(" ");
+
         STRENGTH_STAMINA_DISCOUNT = BUILDER
                 .comment("力量药水附带的耐力效率效果对近战与格挡消耗的减免比例",
                         "Melee and block stamina discount granted by the stamina efficiency effect of strength potions",
@@ -422,6 +435,8 @@ public final class BetterParaglidersConfig {
                         "Range: 1 ~ 7200")
                 .defineInRange("strongSwiftnessDurationSeconds", 900, 1, 7200);
 
+        BUILDER.pop();
+
         BUILDER.comment(" ");
 
         STAMINA_REGEN_EXHAUSTION_PER_WHEEL = BUILDER
@@ -469,6 +484,7 @@ public final class BetterParaglidersConfig {
     private static volatile int swiftnessDurationSeconds = 180;
     private static volatile int longSwiftnessDurationSeconds = 480;
     private static volatile int strongSwiftnessDurationSeconds = 900;
+    private static volatile boolean potionEffectsEnabled = true;
     private static volatile double staminaRegenExhaustionPerWheel = 8.0;
 
     private BetterParaglidersConfig() {}
@@ -533,6 +549,7 @@ public final class BetterParaglidersConfig {
         swiftnessDurationSeconds = value(SWIFTNESS_DURATION_SECONDS);
         longSwiftnessDurationSeconds = value(LONG_SWIFTNESS_DURATION_SECONDS);
         strongSwiftnessDurationSeconds = value(STRONG_SWIFTNESS_DURATION_SECONDS);
+        potionEffectsEnabled = value(ENABLE_POTION_EFFECTS);
         staminaRegenExhaustionPerWheel = value(STAMINA_REGEN_EXHAUSTION_PER_WHEEL);
 
         meleeOverrides = parseOverrides(value(MELEE_ITEM_OVERRIDES), "melee_item_overrides");
@@ -702,6 +719,10 @@ public final class BetterParaglidersConfig {
 
     public static int strongSwiftnessDurationSeconds() {
         return strongSwiftnessDurationSeconds;
+    }
+
+    public static boolean potionEffectsEnabled() {
+        return potionEffectsEnabled;
     }
 
     public static double staminaRegenExhaustionPerWheel() {

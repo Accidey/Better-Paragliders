@@ -11,11 +11,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.xulai.betterparagliders.config.BetterParaglidersConfig;
+
 @Mixin(PotionBrewing.Builder.class)
 public final class PotionBrewingBuilderMixin {
 
     @Inject(method = "addMix", at = @At("HEAD"), cancellable = true)
     private void betterparagliders$blockVanillaPotionMixes(Holder<Potion> input, Item reagent, Holder<Potion> result, CallbackInfo ci) {
+        if (!BetterParaglidersConfig.potionEffectsEnabled()) return;
         if (input.is(Potions.AWKWARD) && reagent == Items.BLAZE_POWDER && result.is(Potions.STRENGTH)
                 || input.is(Potions.STRENGTH) && reagent == Items.REDSTONE && result.is(Potions.LONG_STRENGTH)
                 || input.is(Potions.STRENGTH) && reagent == Items.GLOWSTONE_DUST && result.is(Potions.STRONG_STRENGTH)
